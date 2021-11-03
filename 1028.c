@@ -1,10 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-
-//hello?
-// Five
-// Tset
+// it's house test
 
 void func1();
 void func2(int num);
