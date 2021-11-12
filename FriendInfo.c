@@ -14,7 +14,10 @@ void detailInfo(int fd, FRIEND_T fr, int num);
 void str_fit(char *dest, char *src, int max);
 void add(int fd, FRIEND_T fr);
 void del(int fd, FRIEND_T fr);
-void fav(int fd, FRIEND_T fr);
+void fav(int fd, FRIEND_T fr, int ch);
+void search(int fd, FRIEND_T fr);
+void help();
+void print_menu();
 
 int check = 0;
 int main(int argc, char **argv)
@@ -39,9 +42,11 @@ int main(int argc, char **argv)
 //		printf("%s\n",buf);
 
 		if(strcmp(buf,"quit")==0){
-//			system("clear");
+			system("clear");
 			printf("Good Bye~\n");
 			break;
+		}else if(strcmp(buf,"help")==0){
+			help();		
 		}else if(strcmp(buf,"ls")==0){
 			check = 0;
 		}else if(strcmp(buf,"")==0){
@@ -57,14 +62,17 @@ int main(int argc, char **argv)
 			print_list(fd, check, fr);
 		}else if(isdigit(*buf)){
 			detailInfo(fd,fr,atoi(buf));
+			edit(fd,fr);
 		}else if(strcmp(buf, "del")==0){
 			del(fd, fr);
 			print_list(fd, check, fr);
 		}else if(strcmp(buf, "fav")==0){
-			fav(fd, fr);
-//			print_list(fd, check, fr);
+			fav(fd, fr,1);
+		}else if(strcmp(buf,"unfav")==0){
+			fav(fd, fr, 0);
+		}else if(strcmp(buf,"search")==0){
+			search(fd, fr);
 		}
-
 
 	}
 	close(fd);
@@ -76,18 +84,11 @@ void print_list(int fd, int page, FRIEND_T fr)
 {
 	int re;
 	int size[5]={10,5,17,13,25};
-	char arr[1024],ages[10],menu[1024];
+	char arr[1024],ages[10];
+	char private[30]={"------------------------------"};
 		
-//	system("clear");
-
-	bzero(menu, sizeof(menu));
-	str_fit(menu,"[Name]",size[0]);
-	str_fit(menu,"[Age]",size[1]);
-	str_fit(menu,"[E-mail]",size[2]);
-	str_fit(menu,"[Phone]",size[3]);
-	str_fit(menu,"[Address]", size[4]);
-	printf("[NUM] %s\n",menu);
-	
+	system("clear");
+	print_menu();
 
 	for(int i=15*(page-1);i<15*page;i++){
 		re = lseek(fd, i*sizeof(fr), SEEK_SET);
@@ -102,13 +103,23 @@ void print_list(int fd, int page, FRIEND_T fr)
 
 		bzero(arr,sizeof(arr));	
 
-		str_fit(arr,fr.name,size[0]);
-		sprintf(ages, "%2d", fr.age);
-		str_fit(arr,ages,size[1]);
-		str_fit(arr,fr.email, size[2]);
-		str_fit(arr,fr.phone, size[3]);
-		str_fit(arr,fr.address, size[4]);
-		printf("[%03d] %s\n", i,arr);
+		if(fr.flag==1){
+			str_fit(arr,fr.name,size[0]);
+			sprintf(ages, "%2d", fr.age);
+			str_fit(arr,ages,size[1]);
+			str_fit(arr,fr.email, size[2]);
+			str_fit(arr,fr.phone, size[3]);
+			str_fit(arr,fr.address, size[4]);
+			printf("[%03d] %s\n", i,arr);
+		}else{
+			str_fit(arr,fr.name,size[0]);
+			str_fit(arr,private,size[1]);
+			str_fit(arr,private, size[2]);
+			str_fit(arr,private, size[3]);
+			str_fit(arr,private, size[4]);
+			printf("[%03d] %s\n", i,arr);
+
+		}
 	}
 }
 
@@ -200,6 +211,7 @@ void detailInfo(int fd, FRIEND_T fr, int num)
 {
 	int re;
 	int address;
+	char private[15] ={"---------------"};
 
 	address = num*sizeof(fr);
 	re=lseek(fd, address, SEEK_SET);
@@ -212,12 +224,14 @@ void detailInfo(int fd, FRIEND_T fr, int num)
 		bzero(&fr, sizeof(fr));
 	}
 
-
-	printf("\tName\t: %s\n\tAge\t: %d\n\tE-mail\t: %s\n\tPhone\t: %s\n\tAddress\t: %s\n",
-			fr.name,fr.age,fr.email,fr.phone,fr.address);
-
-	printf("Flag : %d\n",fr.flag);
-
+	
+	if(fr.flag==1){
+		printf("\tName\t: %s\n\tAge\t: %d\n\tE-mail\t: %s\n\tPhone\t: %s\n\tAddress\t: %s\n",
+				fr.name,fr.age,fr.email,fr.phone,fr.address);
+	}else{
+		printf("\tName\t: %s\n\tAge\t: %s\n\tE-mail\t: %s\n\tPhone\t: %s\n\tAddress\t: %s\n",
+				fr.name,private,private,private,private);
+	}
 
 }
 
@@ -325,10 +339,11 @@ void del(int fd, FRIEND_T fr)
 	write(fd, &fr, sizeof(fr));
 }
 
-void fav(int fd, FRIEND_T fr)
+void fav(int fd, FRIEND_T fr,int ch)
 {
+	int re;
 	char num[10];
-	char address;
+	int fav_address;
 
 	bzero(num, sizeof(num));
 
@@ -336,16 +351,113 @@ void fav(int fd, FRIEND_T fr)
 	fflush(stdout);
 	readline(0,num,sizeof(num));
 
-	printf("Input : %d\n",atoi(num));
+	fav_address= sizeof(fr)*atoi(num);
 
-	address= sizeof(fr)*atoi(num);
+	re=lseek(fd, fav_address, SEEK_SET);
+	if(re<0){
+		printf("Not Found Pass\n");
+		exit(1);
+	}
+	re=read(fd,&fr,sizeof(fr));
+	if(re<sizeof(fr))
+		bzero(&fr, sizeof(fr));
 
-	lseek(fd, address, SEEK_SET);
-	read(fd,&fr,sizeof(fr));
-	fr.flag=1;
-	lseek(fd, address, SEEK_SET);
+	if(ch==1)
+		fr.flag=1;
+	else
+		fr.flag=0;
+
+	lseek(fd, fav_address, SEEK_SET);
 	write(fd, &fr, sizeof(fr));
+	detailInfo(fd,fr,atoi(num));
+//	print_list(fd,check,fr);
+}
 
+void search(int fd, FRIEND_T fr)
+{
+	char buf[1024],ages[10],arr[1024],menu[1024];
+	int end;
+	int size[5]={10,5,17,13,25};
+	char private[30]={"------------------------------"};
+
+	bzero(buf,sizeof(buf));
+
+	end = lseek(fd,0,SEEK_END);
+	printf("Search >> ");
+	fflush(stdout);
+	readline(0,buf,sizeof(buf));
+
+	for(int i=0;i<end/sizeof(fr);i++){
+		
+		bzero(ages,sizeof(ages));
+		bzero(arr,sizeof(arr));
+
+		if(lseek(fd,i*sizeof(fr),SEEK_SET)<0)
+			break;
+		if(read(fd,&fr,sizeof(fr))<0)
+			break;
+
+		if(i==0){
+			print_menu();
+		}
+
+	//	printf("fr.name : %s\n",fr.name);
+		if((strstr(fr.name,buf)
+				|| strstr(fr.email,buf)
+				|| strstr(fr.address,buf))
+				&& fr.flag==1){
+			str_fit(arr,fr.name,size[0]);
+			sprintf(ages, "%2d", fr.age);
+			str_fit(arr,ages,size[1]);
+			str_fit(arr,fr.email, size[2]);
+			str_fit(arr,fr.phone, size[3]);
+			str_fit(arr,fr.address, size[4]);
+			printf("[%03d] %s\n", i,arr);
+		}else if((strstr(fr.name, buf)
+				|| strstr(fr.email, buf)
+				|| strstr(fr.address, buf))
+				&& fr.flag!=1){
+			str_fit(arr,fr.name,size[0]);
+			str_fit(arr,private,size[1]);
+			str_fit(arr,private, size[2]);
+			str_fit(arr,private, size[3]);
+			str_fit(arr,private, size[4]);
+			printf("[%03d] %s\n", i,arr);
+
+		}
+	}
+}
+
+
+
+void help()
+{	
+	int i=1;
+	char list[100]=" ls, enter, pre, add, del, edit, fav, unfav";
+	char *ptr;
+	 
+	system("clear");
+	printf("* * * Command List * * *\n");
+	ptr=strtok(list,",");
+	while(ptr>0){
+		printf("  %d. %s\n",i,ptr);
+		ptr=strtok(NULL,",");
+		i++;
+	}
+//	printf("If you want more information, please input option.\n Example : help ls\n");
 }
 
 	
+void print_menu()
+{
+	int size[5]={10,5,17,13,25};
+	char menu[1024];
+
+	bzero(menu, sizeof(menu));
+	str_fit(menu,"[Name]",size[0]);
+	str_fit(menu,"[Age]",size[1]);
+	str_fit(menu,"[E-mail]",size[2]);
+	str_fit(menu,"[Phone]",size[3]);
+	str_fit(menu,"[Address]", size[4]);
+	printf("[NUM] %s\n",menu);
+}
