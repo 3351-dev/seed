@@ -26,18 +26,32 @@ int main(int argc, char **argv)
 				fds[i] = -1;
 				fds[j] = -1;
 			}
+//			printf("[%d] %2d : %2d | ", j,fds[i], fds[j]);
+//			print_array(fds, argc);
 		}
 	}
 
+//	print_array(fds, argc);
+
 	for(int i=0;i<argc-1;i++){
 		if(fds[i] == -1){
+//			printf("bef pull : ");
+//			print_array(fds, argc);
 			for(int j=i;j<sizeof(fds)/sizeof(int)-1;j++){
 				fds[j] = fds[j+1];
 			}
+//			printf("aft pull : ");
+//			print_array(fds, argc);
 		}
-		if(fds[0] == -1)
+
+		if(fds[0] == -1){
 			i--;
+		}
 	}
+	
+//	printf("sizeof(fds) : %ld\n", sizeof(fds)/sizeof(int));
+	
+
 	print_array(fds, argc);
 }
 
