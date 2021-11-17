@@ -17,7 +17,7 @@
 
 int readline(int fd, char *buf, int bufsize);
 int ls(char *list, int listCount);
-void get(int clntSockfd,char *recvBuffer);
+int get(int clntSockfd,char *recvBuffer, char *list);
 
 int main()
 {
@@ -26,7 +26,7 @@ int main()
 	char recvBuffer[MAX], sendBuffer[MAX];
 	int clntLen, recvLen;
 	char list[MAX*100];
-	int listCount=0;
+	int listCount=0, getSize=0;
 	char server_msg[MAX];
 
 	if((servSockfd=socket(AF_INET, SOCK_STREAM, 0))== -1){
@@ -87,6 +87,7 @@ int main()
 					strtok(recvBuffer, "\r");
 
 					bzero(server_msg, sizeof(server_msg));
+					bzero(list, sizeof(list));
 					if((strcmp(recvBuffer, "ls"))==0){
 						listCount=ls(list, listCount);
 						sprintf(server_msg, "ok, total count : %d\n",listCount);
@@ -94,7 +95,10 @@ int main()
 						send(clntSockfd, list, strlen(list), MSG_NOSIGNAL);
 					}else if((strstr(recvBuffer, "get"))!=NULL){
 						printf("cmd > get\n");
-						get(clntSockfd, recvBuffer);
+						getSize=get(clntSockfd, recvBuffer, list);
+						sprintf(server_msg, "ok, total size : %d\n",getSize);
+						send(clntSockfd, server_msg, strlen(server_msg), MSG_NOSIGNAL);
+						send(clntSockfd, list, strlen(list), MSG_NOSIGNAL);
 					}
 
 				}
@@ -183,11 +187,10 @@ int ls(char *list,int listCount)
 	return listCount;
 }
 
-void get(int clntSockfd,char *recvBuffer)
+int get(int clntSockfd,char *recvBuffer, char *list)
 {
-	char buf[MAX], *ptr;
-	int size, filehandle;
-	struct stat obj;
+	char buf[MAX], *ptr, fileName[MAX];
+	int size,filehandle;
 
 //	printf("clntSockfd : %d\n", clntSockfd);
 
@@ -196,12 +199,34 @@ void get(int clntSockfd,char *recvBuffer)
 	ptr=strtok(NULL, " ");
 	printf("%s\n", ptr);
 
-	stat(ptr, &obj);
-	filehandle = open(ptr, O_RDONLY);
-	size = obj.st_size;
+	strcpy(fileName, ptr);
+	printf("%s\n", fileName);
+
+	if(strcmp(fileName, "1116test.c")==0){
+		printf("Same\n");
+	}
+
+	if((filehandle = open(fileName, O_RDONLY))<0){
+		printf("fileHandler failed\n");
+	}else{
+		size = lseek(filehandle, 0, SEEK_END);
+		printf("%s size(%d) : %d\n", fileName, filehandle,size);
+		lseek(filehandle, 0, SEEK_SET);
+		read(filehandle, list, size);
+	}
 
 	if((sendfile(clntSockfd, filehandle, NULL, size))<0){
 		printf("sendfile failed\n");
 	}
+/*
+	filehandle=open("1116test.c", O_RDONLY);
+	read(filehandle, list, size);
+	size=lseek(filehandle, 0, SEEK_END);
+*/
+
+	printf("[get]%d:%d\n%s\n",filehandle,size,list);
+
+	close(filehandle);
+	return size;
 
 }	
