@@ -24,7 +24,7 @@ int main()
 {
 	int servSockfd, clntSockfd;
 	struct sockaddr_in servAddr,clntAddr;
-	char recvBuffer[MAX], sendBuffer[MAX];
+	char recvBuffer[MAX]; //, sendBuffer[MAX];
 	int clntLen, recvLen;
 	char requestBuffer[MAX], *requestptr;//, address[MAX];
 	pid_t pid;
@@ -54,6 +54,7 @@ int main()
 	}
 
 	printf("Server Daemon Start\n");
+	printf("PORT : %d\n", PORT);
 
 	while(1){
 		clntLen = sizeof(clntAddr);
@@ -88,7 +89,6 @@ int main()
 					printf("Client >>> %s", recvBuffer);
 
 					// WEB SERVER
-//					bzero(fileName, sizeof(fileName));
 					bzero(requestBuffer, sizeof(requestBuffer));
 
 					strtok(recvBuffer,"\n");
@@ -99,6 +99,10 @@ int main()
 					printf("request ptr : %s\n",requestptr);
 					strtok(requestptr, " ");
 					printf("request ptr : %s\n",requestptr);
+
+					if(strstr(requestptr, "HTTP/1.")){
+						requestptr = "index.html";
+					}
 
 					if((filefd=open(requestptr, O_RDONLY))==-1){
 						printf("Not found\n");
@@ -122,30 +126,6 @@ int main()
 
 			// Parent process
 			default:	
-				/*
-				while(1){
-					//fgets(sendBuffer, MAX, stdin);
-					readline(0,sendBuffer,sizeof(sendBuffer));
-
-					if(send(clntSockfd, sendBuffer, strlen(sendBuffer), MSG_NOSIGNAL)
-							!= strlen(sendBuffer)){
-						if(errno==EPIPE){
-							printf("Client is out\n");
-							break;
-						}
-
-						perror("send failed");
-						exit(1);
-					}
-					if(strcmp(sendBuffer, "quit")==0){
-						close(clntSockfd);
-						close(servSockfd);
-						kill(pid, SIGINT);
-						printf("Bye.\n");
-						exit(1);
-					}
-				}
-				*/
 //				exit(1);
 				break;
 				
