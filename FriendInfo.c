@@ -20,11 +20,14 @@ void help();
 void print_menu();
 
 int check = 0;
+
 int main(int argc, char **argv)
 {
 	FRIEND_T fr;
 	char buf[1024];
 	int fd;
+	int page=0;
+	int cnt=0;
 
 	if((fd=open(DATA, O_RDWR))==-1){
 		perror("open failed");
@@ -33,23 +36,35 @@ int main(int argc, char **argv)
 
 	while(1){
 		if(check==0){
-			print_list(fd, 1,fr);
+//			print_list(fd, 1,fr);
 			check++;
 		}
-		printf("Command >> ");
-		fflush(stdout);
-		readline(0,buf,sizeof(buf));
-//		printf("%s\n",buf);
+		bzero(buf, sizeof(buf));
+		if(cnt==0 && argv[1]){
+			strcpy(buf, argv[1]);
+//			printf("argv, BUF : %s\n",buf);
+			cnt++;
+		}else if(cnt==1 && argv[1]){
+			close(fd);
+			exit(1);
+			break;
+		}else{
+			printf("Command >> ");
+			fflush(stdout);
+			readline(0,buf,sizeof(buf));
+		}
+
 
 		if(strcmp(buf,"quit")==0){
-			system("clear");
+//			system("clear");
 			printf("Good Bye~\n");
 			break;
 		}else if(strcmp(buf,"help")==0){
 			help();		
 		}else if(strcmp(buf,"ls")==0){
 			check = 0;
-		}else if(strcmp(buf,"")==0){
+			print_list(fd, check, fr);
+		}else if(strcmp(buf,"next")==0){
 			check++;
 			print_list(fd,check,fr);
 		}else if(strcmp(buf, "pre")==0){
@@ -72,6 +87,21 @@ int main(int argc, char **argv)
 			fav(fd, fr, 0);
 		}else if(strcmp(buf,"search")==0){
 			search(fd, fr);
+		}else if(strstr(buf, "view")){
+			char *bufptr;
+			int fd2;
+			bufptr = strtok(buf,"=");
+			bufptr = strtok(NULL,"=");
+//			printf("bufptr : %s\n", bufptr);
+			page=atoi(bufptr);
+			fd2=open("view.txt", O_WRONLY | O_CREAT | O_TRUNC, 775);
+			lseek(fd2, 0, SEEK_SET);
+			write(fd2, "test", 100);
+			lseek(fd2, 0, SEEK_SET);
+			close(fd2);
+			
+
+			print_list(fd, page, fr);
 		}
 
 	}
@@ -86,10 +116,11 @@ void print_list(int fd, int page, FRIEND_T fr)
 	int size[5]={10,5,17,13,25};
 	char arr[1024],ages[10];
 	char private[30]={"------------------------------"};
-		
-	system("clear");
-	print_menu();
 
+	printf("PAGE : %d\n",page);
+		
+//	system("clear");
+	print_menu();
 	for(int i=15*(page-1);i<15*page;i++){
 		re = lseek(fd, i*sizeof(fr), SEEK_SET);
 		if(re<0){
@@ -238,7 +269,7 @@ void detailInfo(int fd, FRIEND_T fr, int num)
 void str_fit(char *dest, char *src, int max)
 {
 	int hanCount=0;
-	int hanmax=0;
+//	int hanmax=0;
 
 	for(int i=0;i<strlen(src);i++){
 		if(src[i]&128)
@@ -375,7 +406,7 @@ void fav(int fd, FRIEND_T fr,int ch)
 
 void search(int fd, FRIEND_T fr)
 {
-	char buf[1024],ages[10],arr[1024],menu[1024];
+	char buf[1024],ages[10],arr[1024];//,menu[1024];
 	int end;
 	int size[5]={10,5,17,13,25};
 	char private[30]={"------------------------------"};
@@ -436,7 +467,7 @@ void help()
 	char list[100]=" ls, enter, pre, add, del, edit, fav, unfav";
 	char *ptr;
 	 
-	system("clear");
+//	system("clear");
 	printf("* * * Command List * * *\n");
 	ptr=strtok(list,",");
 	while(ptr>0){
