@@ -35,11 +35,14 @@ int friends(int sfd,char *option,int select)
 		return -1;
 	}
 	opt = atoi(option);
-	write(sfd,htmlheader,strlen(htmlheader));
+	write(sfd, htmlheader, strlen(htmlheader));
 	sprintf(buf, "<!DOCTYPE html> <html laon=\"ko\"> <head> <title> Friends </title> </head>"
-			"<body><h1> Friends List </h1>");
+			"<body><h1> Friends List </h1>"
+			"<form action=\"find\" method=\"get\">"
+			"<input type=\"find\" name=\"what\"><input type=\"submit\"></form>");
 	write(sfd, buf, strlen(buf));
 
+	// 1 Show Friends List
 	if(select==1){
 		for(int i=15*(opt-1);i<15*opt;i++){
 			lseek(frifd, i*sizeof(fr), SEEK_SET);
@@ -49,11 +52,14 @@ int friends(int sfd,char *option,int select)
 				break;
 			}
 			else{
-				sprintf(content, "%s / %d / %s / %s / %s\n", fr.name, fr.age, fr.address, fr.phone, fr.email);
+				sprintf(content, "%s / %d / %s / %s / %s\n"
+						, fr.name, fr.age, fr.address, fr.phone, fr.email);
 				sprintf(buf, "<p><a href=\"detail=%d\"> %s </a></p>", i+1,content);
 				write(sfd, buf, strlen(buf));
 			}
 		}
+
+	// 2 Detail
 	}else if(select==2){
 		lseek(frifd, (opt-1)*sizeof(fr), SEEK_SET);
 		read(frifd, &fr, sizeof(fr));
@@ -62,8 +68,23 @@ int friends(int sfd,char *option,int select)
 		write(sfd, buf, strlen(buf));
 		sprintf(buf, "<p><a href=\"fr?view=%d\"> Home </a></p>",1);
 		write(sfd, buf, strlen(buf));
-		
+
+	// 3 Search
+	}else if(select==3){
+		int size_fri = lseek(frifd, 0,SEEK_END);
+		for(int i=0; i*sizeof(fr)<size_fri; i++){
+			lseek(frifd, i*sizeof(fr), SEEK_SET);
+			read(frifd, &fr, sizeof(fr));
+			if((strstr(fr.name, option)
+					|| strstr(fr.email, option)
+					|| strstr(fr.address, option))){
+				sprintf(content, "%s / %d / %s / %s / %s\n", fr.name, fr.age, fr.address, fr.phone, fr.email);
+				sprintf(buf, "<p><a href=\"detail=%d\"> %s </a></p>", i+1,content);
+				write(sfd, buf, strlen(buf));
+			}
+		}
 	}
+
 	sprintf(buf, "</body> </html>");
 	write(sfd, buf, strlen(buf));
 	return 0;
@@ -143,18 +164,20 @@ int main()
 					bzero(requestBuffer, sizeof(requestBuffer));
 
 					strtok(recvBuffer,"\n");
-					printf("recvBuffer : %s\n", recvBuffer);
+//					printf("recvBuffer : %s\n", recvBuffer);
 					requestptr = strstr(recvBuffer,"GET /");
-					printf("request ptr : %s\n",requestptr);
+//					printf("request ptr : %s\n",requestptr);
 					requestptr += 5;
-					printf("request ptr : %s\n",requestptr);
+//					printf("request ptr : %s\n",requestptr);
 					strtok(requestptr, " ");
-					printf("request ptr : %s\n",requestptr);
+					printf("request ptr : %s\n\n",requestptr);
 
 					if(!strncmp(requestptr, "fr?",3)){
 						return friends(clntSockfd,requestptr+3,1);
 					}else if(strstr(requestptr, "detail")){
 						return friends(clntSockfd, requestptr,2);
+					}else if(!strncmp(requestptr, "find?", 5)){
+						return friends(clntSockfd, requestptr+5,3);
 					}
 
 					if(strstr(requestptr, "HTTP/")){
