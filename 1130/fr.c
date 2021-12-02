@@ -8,13 +8,15 @@
 
 #include "friend.h"
 
-#define LIST_NUM 5
+#define LIST_NUM 30
 #define MAX 1024
 #define DATA "1109.dat"
 #define HOME (((opt-1)/LIST_NUM)+1)
 
 char header[] ={ 
-			"<!DOCTYPE html> <html> <head> <title> Fr </title> </head>"
+//			"<!DOCTYPE html> <html lang=\"ko\"> <head> <title> Fr </title> </head>"
+			"<html lang=\"ko\"> <head> <meta charset=\"utf-8\"> <title> Fr </title></head>"
+				// meta charset을 해줘야 페이지에서 한글로 잘 표기된다
 			"<body> <h1 align=\"center\"> Friends List &nbsp </h1>"
 };
 char end[]={
@@ -23,6 +25,7 @@ char end[]={
 
 int friends(int select, char *option);
 int friends_rdwr(int select, char *option);
+int decode_url(char *url);
 
 int main(int argc, char **argv)
 {
@@ -74,17 +77,19 @@ int friends(int select, char *option)
 	char Buf[MAX*10], content[MAX];
 	FRIEND_T fr;
 
+	strcpy(Buf, option);
+	decode_url(Buf);
+
 	if((frifd=open(DATA, O_RDONLY))==-1){
 		printf("open failed\n");
 		return -1;
 	}
-
 	opt = atoi(option);
 
 	sprintf(Buf,
 			"%s"
 			"<div align=\"center\">"
-			"<form action=\"./fr.cgi\" method=\"get\">"
+			"<form action=\"./fr.cgi\" accept-charset=\"utf-8\" method=\"get\">"
 			"<input type=\"search\" name=\"search\">"
 			"<input type=\"submit\" value=\"Search\"> </form> </div>"
 			"<h5 align=\"center\"> #%d &nbsp </h5>"
@@ -102,7 +107,7 @@ int friends(int select, char *option)
 			"<a href=\"./fr.cgi?list=%d\"><button> &#9829 </button></a>&nbsp"
 			"<a href=\"./fr.cgi?list=%d\"><button> Next</button></a>"
 			"</div>"
-			, opt-1, opt ,opt+1
+			, opt-1, 1 ,opt+1
 			);
 		printf("%s\n", Buf);
 		for(int i=LIST_NUM*(opt-1); i<LIST_NUM*opt; i++){
@@ -132,7 +137,7 @@ int friends(int select, char *option)
 			   );
 		printf("%s\n", Buf);
 
-		sprintf(Buf, "<h2>Name: %s</h2>Age: %d<br>Phone: %s<br>E-mail: %s<br>Address: %s<br>Favorite: %d<br>"
+		sprintf(Buf, "<h2>Name: %s</h2>Age: %d<br>Phone: %s<br>E-mail: %s<br>Address: %s<br>Favorite: %d<br><br>"
 				, fr.name, fr.age, fr.phone, fr.email,fr.address, fr.flag);
 		printf("%s\n", Buf);
 	}
@@ -161,7 +166,7 @@ int friends(int select, char *option)
 
 
 	sprintf(Buf, 
-			"<a href=\"./fr.cgi?addValue%d\">"
+			"<a href=\"./fr.cgi?addValue=%d\">"
 			"<button> add </button> <br>"
 			"</a>"
 			,endNum+1
@@ -176,9 +181,13 @@ int friends(int select, char *option)
 int friends_rdwr(int select, char *option)
 {
 	int frifd, th, opt;
-	char buf[MAX], *ptrOpt, *ptrValue;
+	char buf[MAX], temp[MAX], *ptrTemp;
 	char *menu[5]={"name", "age", "phone", "email", "address"};
+	char value[5][MAX];
 	FRIEND_T fr;
+
+	strcpy(buf, option);
+	decode_url(buf);
 
 	if((frifd=open(DATA, O_WRONLY, 0755))==-1){
 		printf("open failed\n");
@@ -189,15 +198,14 @@ int friends_rdwr(int select, char *option)
 	printf("%s", buf);
 	
 	
-	// add form 
+	// 1 add form 
 	if(select==1){
 		opt = atoi(option);
 		th = lseek(frifd, 0, SEEK_END)/sizeof(fr)+1;
 
 		sprintf(buf,
-//				"%s"
 				"<h5 align=\"center\"> #%d &nbsp </h5>"
-				"<form action=\"./fr.cgi\" method=\"get\">"
+				"<form action=\"./fr.cgi\" accept-charset=\"utf-8\" method=\"get\">"
 				,opt
 			   );
 		printf("%s", buf);
@@ -209,42 +217,79 @@ int friends_rdwr(int select, char *option)
 					"<input type=\"text\" name=\"%s\"><br>",menu[i],menu[i]);
 			printf("%s\n",buf);
 		}
-		
+		printf("<br>");
 		sprintf(buf, "<input type=\"submit\" value=\"submit\"> </form>");
 		printf("%s", buf);
 
-	// add input
+	// 2 add input
 	}else if(select == 2){
-//		ptrOpt = option;
-		for(int i=0;i<5;i++){
-			ptrOpt = option;
+		th = lseek(frifd, 0, SEEK_END)/sizeof(fr)+1;
+		opt=th;
 
-			for(int j=0;j<i;j++){
-				ptrOpt=strtok(ptrOpt,"&");
-				ptrOpt=strtok(NULL,"&");
-				ptrOpt=strtok(NULL,"&");
+		lseek(frifd, 0, SEEK_END);
+		read(frifd, &fr, sizeof(fr));
+
+		for(int i=0;i<5;i++){
+			strcpy(temp, option);
+			ptrTemp = strtok(temp, "=");
+			for(int j=0;j<i+1;j++){
+				ptrTemp = strtok(NULL,"=");
+			}
+			ptrTemp = strtok(ptrTemp, "&");
+
+			if(ptrTemp == NULL
+					|| (strcmp(ptrTemp,"age")==0)
+					|| (strcmp(ptrTemp,"phone")==0)
+					|| (strcmp(ptrTemp,"email")==0)
+					|| (strcmp(ptrTemp,"address")==0)
+					){
+				ptrTemp="NULL";
 			}
 
-			printf("ptrOpt : %s<br>",ptrOpt);
-			ptrOpt = strtok(ptrOpt,"&");
-			ptrValue = strtok(ptrOpt,"=");
-			ptrValue = strtok(NULL,"=");
-			printf("&nbsp ptrOpt : %s<br>&nbsp ptrValue : %s<br>", ptrOpt,ptrValue);
-/*
-			ptrOpt=option;
-			ptrOpt = strtok(ptrOpt, "&");
-			ptrOpt = strtok(NULL, "=");
-*/
-
-			printf("<br>");
+			strcpy(value[i], ptrTemp);
+			printf("value[%d] : %s<br>", i+1, ptrTemp);
+			printf("<br>");		
 		}
 
+		for(int i=0;i<5;i++){
+			decode_url(value[i]);
+			printf("value[%d] : %s<br>",i,value[i]);
+		}
+		printf("<br>");
+
+		strcpy(fr.name, value[0]);
+		fr.age =atoi(value[1]);
+		strcpy(fr.phone,value[2]);
+		strcpy(fr.email, value[3]);
+		strcpy(fr.address, value[4]);
+	
+		write(frifd, &fr, sizeof(fr));
+
+		sprintf(buf,
+				"<a href=\"./fr.cgi?list=%d\">"
+				"<button> check </button> <br>"
+				"</a>"
+				,HOME);
+		printf("%s",buf);
 	}
-
-
 
 	printf("%s\n", end);
 	close(frifd);
 	return 0;
 }
 
+int decode_url(char *url)
+{
+	char *t;
+	for(t=url;*url;t++){
+		if(*url=='%'){
+			char *eptr = url+3;
+			*t=strtol(url+1, &eptr, 16);
+			url+=3;
+		}else *t=*(url++);
+	}
+	*t=0l;
+
+	return 0;
+}
+			

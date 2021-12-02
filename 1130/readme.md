@@ -26,5 +26,8 @@ hosts
 /etc/hosts
  localhost >> myhost.com
  
+@1202
+한글 안나오는 문제
+\<head\> 안에 meta를 이용하여 설정해준다
 
 
