@@ -4,7 +4,7 @@ Error List
 1130
 -----
 ##Err
-~~~using 127.0.1.1 set the 'ServerName' directive globally to suppress this message
+using 127.0.1.1 set the 'ServerName' directive globally to suppress this message
 vi /etc/apache2/apache2.conf
 ServerName "~~~"
 sudo service apache2 restart
