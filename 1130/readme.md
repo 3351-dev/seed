@@ -40,5 +40,6 @@ localhost > myhost.com
 #### php   
 php를 이용하여 multipart를 통해 파일전송을 구현하였다.   
 option을 받아 이름을 지정해주어 출력이 된다.   
+![Screenshot from 2021-12-03 18-39-42](https://user-images.githubusercontent.com/93642972/144580853-514ec59f-cc8a-4c25-a974-01f64b54f901.png)
 
 
