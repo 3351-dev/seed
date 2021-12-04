@@ -248,8 +248,21 @@ int friends_rdwr(int select, char *option)
 			printf("%s\n",buf);
 		}
 		printf("<br>");
+		
 		sprintf(buf, "<input type=\"submit\" value=\"submit\"> </form>");
 		printf("%s", buf);
+		/*
+		// 사진 업로드 PHP
+		sprintf(buf,
+				"<form action=\"./upload.php\" method=\"post\" enctype=\"multipart/form-data\">"
+				"<input tpye=\"text\" name=\"option\" value=\"%s\" readonly<br>"
+				"<input type=\"file\" name=\"file\" /> <br>"
+				"<input type=\"submit\" value=\"submit\" /> &nbsp"
+				"</form>"
+				,option
+			  );
+		printf("%s", buf);
+		*/
 
 	// 2 add input
 	}else if(select == 2){
@@ -277,8 +290,6 @@ int friends_rdwr(int select, char *option)
 			}
 
 			strcpy(value[i], ptrTemp);
-			printf("value[%d] : %s<br>", i+1, ptrTemp);
-			printf("<br>");		
 		}
 
 		for(int i=0;i<5;i++){
@@ -296,9 +307,8 @@ int friends_rdwr(int select, char *option)
 		write(frifd, &fr, sizeof(fr));
 
 		sprintf(buf,
-//				"<a href=\"./fr.cgi?list=%d\">"
 				"<a href=\"./fr.cgi?upload_page=%d\">"
-				"<button> check </button> <br>"
+				"<button> ok  </button> <br>"
 				"</a>"
 				,opt);
 		printf("%s",buf);
@@ -325,9 +335,8 @@ int upload_page(char *option)
 	printf("%s\n", buf);
 	 
 	sprintf(buf,
-//			"<form action=\"./fr.cgi\" method=\"post\" enctype=\"multipart/form-data\">"
 			"<form action=\"./upload.php\" method=\"post\" enctype=\"multipart/form-data\">"
-			"<input tpye=\"text\" name=\"option\" value=\"%s\"><br>"
+			"<input tpye=\"text\" name=\"option\" value=\"%s\" readonly /><br>"
 			"<input type=\"file\" name=\"file\" /> <br>"
 			"<input type=\"submit\" value=\"submit\" /> &nbsp"
 			"</form>"
@@ -384,6 +393,9 @@ int decode_url(char *url)
 			char *eptr = url+3;
 			*t=strtol(url+1, &eptr, 16);
 			url+=3;
+		}else if(*url =='+'){
+			*t = ' ';
+			url+=1;
 		}else *t=*(url++);
 	}
 	*t=0l;

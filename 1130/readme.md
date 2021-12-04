@@ -42,3 +42,13 @@ php를 이용하여 multipart를 통해 파일전송을 구현하였다.
 option을 받아 이름을 지정해주어 출력이 된다.   
 ![Screenshot from 2021-12-03 18-41-54](https://user-images.githubusercontent.com/93642972/144580998-d8be0147-b3e4-4cd7-bc5f-d799c069bce3.png)
 
+
+1203
+----
+#### default img 지정   
+upload.php 파일에서 이미지가 선택이없을때 기본사진이 올라가도록 설정   
+
+#### 입력에서 띄어쓰기시 +가 나타나는 현상 제거   
+기존에 decode함수에서 띄어쓰기 처리가 안돼있어 추가   
+
+
