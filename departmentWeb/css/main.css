@@ -1,0 +1,40 @@
+.gnb ul{
+	font-size:13px;
+	background:#999;
+}
+
+.gnb {
+position: relative;
+display:inline-block;
+}
+
+.submenu{
+display:none;
+/* position: absolute; */
+}
+
+.submenu a {
+display:block;
+}
+
+.submenu a:hover {background-color: #ddd;}
+.gnb:hover .submenu {display: block;}
+
+
+.gnb ul{
+list-style:none;
+margin:0;
+padding:0;
+/* float:right;	*/
+/* display: inline-block; */
+}
+
+.gnb li{
+margin: 0 0 0 0;
+padding: 0 0 0 0;
+border: 0;
+/* float:left; */
+display: inline-block;
+}
+
+

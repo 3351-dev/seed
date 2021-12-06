@@ -1,0 +1,54 @@
+@charset "utf-8";
+
+/*
+@import url("../../common/css/main-sec.css");
+@import url("../../common/css/college8-sec.css");
+
+.container .top>ul>li span:after{content: '�뺣낫�듭떊怨듯븰怨�';}
+*/
+
+.container .rep{background-image:url('../images/represent@2.jpg');}
+/*.container .left{float:right;padding-left:0;padding-right:30px;}
+.container .right{float:left;margin-left:0;margin-right:4.5%;}
+.container .depart-e{padding:30px 30% 30px 0;text-align:left;}
+.container .depart-k{padding:0px 30% 30px 0;text-align:left;}*/
+.site-content{background:url('../images/main-bg.jpg') no-repeat center 0;position:relative;top:-22px;}
+.header{position:relative;}
+.container .top>ul>li:nth-child(2){background-color:#9581c3;}
+.container .top>ul>li:nth-child(2) span{border:1px solid rgba(255,255,255,.3);background:rgba(0,0,0,.03);color:rgba(255,255,255,.8);}
+.container .top>ul>li:nth-child(2) a{color:#fff;}
+.container .top>ul>li:nth-child(2) a:hover{color:rgba(218,255,70,1);}
+.container .top>ul>li:nth-child(1){background-image:url('../images/main.jpg');background-repeat:no-repeat;background-position:center;background-size:auto;}
+.container .top>ul>li:nth-child(1) span{border:1px solid rgba(255,255,255,.5);background:rgba(0,0,0,.03);color:rgba(255,255,255,.8);}
+.container .top>ul>li:nth-child(1) a{color:#fff;font-size:22px;line-height:28px;padding:40px 23px 0 0;text-align:center;text-indent:0;text-shadow:0 0 5px black}
+/*.container .right>ul>li a:hover{color:rgba(208,13,28,1);}
+.container .right>ul>li:nth-child(2) span{border:1px solid rgba(255,255,255,.3);background:rgba(0,0,0,.03);color:rgba(255,255,255,.8);}
+.container .right>ul>li:nth-child(2) a{color:#fff;}
+.container .right>ul>li:nth-child(2) a:hover{color:rgba(218,255,70,1);}
+.container .right>ul>li:nth-child(1){background-image:url('../images/icon1@2.png'), url('../images/icon-bg@2.png');background-repeat:no-repeat, repeat;background-position:right bottom, center;background-size:101px 88px,8px 8px;}
+.container .right>ul>li:nth-child(2){background-image:url('../images/icon2@2.png');background-repeat:no-repeat;background-position:right bottom;background-size:115px 93px}*/
+.container .top>ul>li:nth-child(3){background-color:#eee;}
+/*photo*/
+
+/*college4 湲��먯쐞移섎�寃�
+.container .left{margin-top:144px;}
+.container .depart-e{color:#333;}
+.container .depart-k{color:#333;}
+.container .left h2, .container .left .more{padding-top:300px;}*/
+@media only screen and (max-width: 900px) {
+.site-content {background:none;}
+/*college4 湲��먯쐞移섎�寃�*/
+.container .left{margin-top:0;}
+.container .depart-e{color:#fff;}
+.container .depart-k{color:#fff;}
+.container .left h2, .container .left .more{padding-top:25px;}
+.container .top>ul>li:nth-child(1) a{color:#fff;font-size:17px;line-height:22px;padding:0px;}
+}
+
+
+gnb{
+	submenu{ display:none; positaion:relateive; }
+	/* a태그가 처음에는 보이지 않게*/
+	&:hover{ submenu{ display: block; } }
+	/* li에 마우스를 올릴때 a 태그 보이게하기*/
+}
