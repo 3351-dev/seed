@@ -9,11 +9,14 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -33,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
     private Stack<String> operatorStack;    // Stack for Operator
     private List<String> infixList;         //  Infix notation
     private List<String> postfixList;       //  Postfix notation
+    private Stack<String> postStack;    // Stack for Operator
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
         txtResult = findViewById(R.id.txt_result);
         checkList = new ArrayList<>();
         operatorStack = new Stack<>();
+        postStack = new Stack<>();
         infixList = new ArrayList<>();
         postfixList = new ArrayList<>();
 
@@ -80,12 +85,42 @@ public class MainActivity extends AppCompatActivity {
 
             case R.id.btn_dot : addDot(".");break;
             case R.id.btn_division : addOperator("/");break;
-//            case R.id.btn_mod : addOperator("%");break;
             case R.id.btn_multi : addOperator("x");break;
             case R.id.btn_plus : addOperator("+");break;
             case R.id.btn_minus: addOperator("-");break;
+//            case R.id.btn_bracket_1: addOperator("(");break;
+//            case R.id.btn_bracket_2: addOperator(")");break;
 
         }
+    }
+
+    public void bracketClick(View v){
+        Button btn = (Button) findViewById(R.id.btn_bracket);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                checkList.add(0);
+                txtExpression.append("( ");
+            }
+        });
+
+        btn.setOnLongClickListener(new View.OnLongClickListener(){
+            @Override
+            public boolean onLongClick(View v){
+                checkList.add(1);
+                txtExpression.append(" )");
+                return true;
+            }
+        });
+    }
+
+    public void bracketText(){
+        String test = "1+2*(3-4)*5";
+//        test.toString().split("\\(" );
+        String[] res = test.split("\\(");
+
+        Log.d("3351 ", " "+Arrays.toString(res));
+        Log.d("3351 ", " "+res[1]);
     }
 
     // Event Handling for Clear Button
@@ -99,19 +134,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // Event Handling for delete Button
-//    Todo
     public void deleteClick(View v){
+//        Log.d("test","3351  "+txtExpression.length());
         if(txtExpression.length()!=0){
             checkList.remove(checkList.size() -1 );
             String[] ex = txtExpression.getText().toString().split(" ");
             List<String> li = new ArrayList<String>();
             Collections.addAll(li, ex);
             li.remove(li.size()-1);
+            // 마지막이 연산자일때 " " 빈칸 추가
             if(li.size()>0 && !isNumber(li.get(li.size()-1)))
                 li.add(li.remove(li.size()-1)+" ");
             txtExpression.setText(TextUtils.join(" ",li));
         }
-        txtExpression.setText("");
+        txtResult.setText("");
     }
 
     public void percentClick(View v){
@@ -186,6 +222,12 @@ public class MainActivity extends AppCompatActivity {
         }
         Collections.addAll(infixList, txtExpression.getText().toString().split(" "));
         checkList.add(-1);
+        for(int i=0;i<infixList.size();i++){
+//            Log.d("infixList"," "+infixList.get(i));
+        }
+//        for(int i=0;i<checkList.size();i++){
+//            Log.d("infix List"," "+checkList.get(i));
+//        }
         result();
     }
 
@@ -197,12 +239,13 @@ public class MainActivity extends AppCompatActivity {
             case "/":
                 weight = 5;
                 break;
-//            case "%":
-//                weight = 3;
-//                break;
+            case "(":
+            case")":
+                weight = 1;
+                break;
             case "+":
             case "-":
-                weight = 1;
+                weight = 3;
                 break;
         }
         return weight;
@@ -217,26 +260,68 @@ public class MainActivity extends AppCompatActivity {
         }
         return result;
     }
-
+//  original
     // 전위 -> 후위
-    void infixToPostfix(){
-        for (String item:infixList){
-            if(isNumber(item))
-                postfixList.add(String.valueOf(Double.parseDouble(item)));
-            else{
-                if(operatorStack.isEmpty())
-                    operatorStack.push(item);
-                else{
-                    if(getWeight(operatorStack.peek())>=getWeight(item))
-                        postfixList.add(operatorStack.pop());
-                    operatorStack.push(item);
-                }
+//    void infixToPostfix(List<String> infixList){
+//        for (String item:infixList) {
+//            if (isNumber(item))
+//                postfixList.add(String.valueOf(Double.parseDouble(item)));
+////            else if(item.equals("(")){
+////                item = item.replace("(","+");
+////                Log.d("iTp"," hello ");
+////            }
+//            else{
+//                if(operatorStack.isEmpty())
+//                    operatorStack.push(item);
+//                else{
+//                    if(getWeight(operatorStack.peek())>=getWeight(item))
+//                        postfixList.add(operatorStack.pop());
+//                    operatorStack.push(item);
+//                }
+//            }
+//        }
+//        while(!operatorStack.isEmpty())
+//            postfixList.add(operatorStack.pop());
+//    }
+
+    public ArrayList<String> infixToPostfix(List<String> infixList){
+        ArrayList<String> result = new ArrayList<>();
+        String forPrint="";
+        for(int i=0;i<infixList.size();i++){
+            switch (infixList.get(i)){
+                case "(":
+                    postStack.push(infixList.get(i));
+                    break;
+                case ")":
+                    forPrint=postStack.pop();
+                    while(!forPrint.equals("(")){
+                        result.add(forPrint);
+                        forPrint = postStack.pop();
+                    }
+                    break;
+                case"+":
+                case"x":
+                case"/":
+                case"-":
+                    while(!postStack.isEmpty() && getWeight(infixList.get(i))<=getWeight(postStack.peek())){
+                        forPrint = postStack.pop();
+                        result.add(forPrint);
+                    }
+                    postStack.push(infixList.get(i));
+                    break;
+                default:
+                    result.add(infixList.get(i));
+                    break;
             }
         }
-        while(!operatorStack.isEmpty())
-            postfixList.add(operatorStack.pop());
-    }
 
+        while(!postStack.isEmpty()){
+            forPrint=postStack.pop();
+            result.add(forPrint);
+        }
+        Log.d("ITP"," "+result);
+        return result;
+    }
     // Calculate
     String calculate(String num1, String num2, String op){
         double first = Double.parseDouble(num1);
@@ -250,9 +335,6 @@ public class MainActivity extends AppCompatActivity {
                 case "/":
                     result = first / second;
                     break;
-//                case "%":
-//                    result = first*0.01;
-//                    break;
                 case "+":
                     result = first + second;
                     break;
@@ -261,23 +343,31 @@ public class MainActivity extends AppCompatActivity {
                     break;
             }
         }catch (Exception e){
-            Toast.makeText(getApplicationContext(),"연산할 수 없습니다.",Toast.LENGTH_SHORT).show();;
+            Toast.makeText(getApplicationContext(),"연산할 수 없습니다.",Toast.LENGTH_SHORT).show();
         }
         return String.valueOf(result);
     }
 
+
     void result(){
-        int i = 0;
-        infixToPostfix();
-        while(postfixList.size()!=1){
-            if(!isNumber((postfixList.get(i)))){
-                postfixList.add(i-2,calculate(postfixList.remove(i-2),postfixList.remove(i-2),postfixList.remove(i-2)));
+        int i=0;
+//        infixToPostfix(infixList);
+//        Log.d("infixToPostfix"," "+postfixList);
+        ArrayList<String> res = infixToPostfix(infixList);
+        Log.d("res ", " "+res);
+        Log.d("stack ", " "+postStack); // null
+        while(res.size()!=1) {
+            if (!isNumber((res.get(i)))) {
+                res.add(i - 2, calculate(res.remove(i - 2), res.remove(i - 2), res.remove(i - 2)));
                 i = -1;
             }
             i++;
         }
-        txtResult.setText(postfixList.remove(0));
+
+        txtResult.setText(res.remove(0));
+        res.clear();
         infixList.clear();
+
     }
 
 

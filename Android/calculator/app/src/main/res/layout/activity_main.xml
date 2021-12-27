@@ -48,6 +48,16 @@
                 android:layout_weight="1">
 
                 <Button
+                    android:id="@+id/btn_clear"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:backgroundTint="#3EBAB4B4"
+                    android:onClick="clearClick"
+                    android:text="C"
+                    android:textSize="18sp"
+                    />
+
+                <Button
                     android:id="@+id/btn_mod"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
@@ -57,24 +67,15 @@
                     android:textSize="18sp" />
 
                 <Button
-                    android:id="@+id/button2"
+                    android:id="@+id/btn_division"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:backgroundTint="#3EBAB4B4"
-                    android:clickable="false"
-                    android:enabled="false"
-                    android:text="CE"
+                    android:text="/"
+                    android:onClick="buttonClick"
                     android:textSize="18sp"
                     />
-                <Button
-                    android:id="@+id/btn_clzear"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:backgroundTint="#3EBAB4B4"
-                    android:onClick="clearClick"
-                    android:text="C"
-                    android:textSize="18sp"
-                    />
+
 
                 <Button
                     android:id="@+id/btn_delete"
@@ -86,49 +87,49 @@
                     android:textSize="18sp"/>
             </TableRow>
 
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1">
+<!--            <TableRow-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:layout_weight="1">-->
 
-                <Button
-                    android:id="@+id/button6"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:backgroundTint="#3EBAB4B4"
-                    android:clickable="false"
-                    android:enabled="false"
-                    android:text="1/x"
-                    android:textSize="18sp"
-                    />
-                <Button
-                    android:id="@+id/button7"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:backgroundTint="#3EBAB4B4"
-                    android:clickable="false"
-                    android:enabled="false"
-                    android:text="x^2"
-                    android:textSize="18sp"/>
-                <Button
-                    android:id="@+id/button8"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:backgroundTint="#3EBAB4B4"
-                    android:clickable="false"
-                    android:enabled="false"
-                    android:text="root"
-                    android:textSize="18sp"
-                    />
-                <Button
-                    android:id="@+id/btn_division"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:backgroundTint="#3EBAB4B4"
-                    android:onClick="buttonClick"
-                    android:text="/"
-                    android:textSize="18sp"/>
-            </TableRow>
+<!--                <Button-->
+<!--                    android:id="@+id/button6"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:backgroundTint="#3EBAB4B4"-->
+<!--                    android:clickable="false"-->
+<!--                    android:enabled="false"-->
+<!--                    android:text="1/x"-->
+<!--                    android:textSize="18sp"-->
+<!--                    />-->
+<!--                <Button-->
+<!--                    android:id="@+id/button7"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:backgroundTint="#3EBAB4B4"-->
+<!--                    android:clickable="false"-->
+<!--                    android:enabled="false"-->
+<!--                    android:text="x^2"-->
+<!--                    android:textSize="18sp"/>-->
+<!--                <Button-->
+<!--                    android:id="@+id/button8"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:backgroundTint="#3EBAB4B4"-->
+<!--                    android:clickable="false"-->
+<!--                    android:enabled="false"-->
+<!--                    android:text="root"-->
+<!--                    android:textSize="18sp"-->
+<!--                    />-->
+<!--                <Button-->
+<!--                    android:id="@+id/btn_division"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:backgroundTint="#3EBAB4B4"-->
+<!--                    android:onClick="buttonClick"-->
+<!--                    android:text="/"-->
+<!--                    android:textSize="18sp"/>-->
+<!--            </TableRow>-->
 
             <TableRow
                 android:layout_width="match_parent"
@@ -266,13 +267,13 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1">
                 <Button
-                    android:id="@+id/button22"
+                    android:id="@+id/btn_bracket"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:backgroundTint="#85FFFFFF"
-                    android:clickable="false"
-                    android:enabled="false"
-                    android:text="+/-"
+                    android:text="( )"
+                    android:onClick="bracketClick"
+                    android:textColor="@color/black"
                     android:textSize="18sp"/>
                 <Button
                     android:id="@+id/btn_zero"
