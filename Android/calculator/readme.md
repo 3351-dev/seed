@@ -3,7 +3,7 @@
 * 후위표기 + Stack   
 * btn.setOnLongClickListener를 이용한 괄호 열기/닫기   
   * 짧게 누를 때 : (
-  * 
+  * 길게 누를 때 : )   
 
 
 *  괄호 연산 가능
