@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
 
@@ -88,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
             case R.id.btn_multi : addOperator("x");break;
             case R.id.btn_plus : addOperator("+");break;
             case R.id.btn_minus: addOperator("-");break;
-//            case R.id.btn_bracket_1: addOperator("(");break;
+            case R.id.btn_percent: addOperator("%");break;
 //            case R.id.btn_bracket_2: addOperator(")");break;
 
         }
@@ -99,6 +100,15 @@ public class MainActivity extends AppCompatActivity {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(!checkList.isEmpty()){
+                    int opCheck = checkList.get(checkList.size()-1);
+                    Log.d("ArrayList", " "+opCheck);
+                    if(opCheck==1){
+                        addOperator("x");
+                    }
+//                    LinkedList linkedList = new LinkedList<>(checkList);
+//                    Log.d("LinkedList", " "+linkedList.getLast());
+                }
                 checkList.add(0);
                 txtExpression.append("( ");
             }
@@ -152,18 +162,39 @@ public class MainActivity extends AppCompatActivity {
 
     public void percentClick(View v){
         double first;
-        if(txtExpression.length()==0){
+        if(!checkList.isEmpty()){
+            int opCheck = checkList.get(checkList.size()-1);
+            if(opCheck!=0) {
+                if (txtResult.length() == 0) {
+                    String[] ex = txtExpression.getText().toString().split(" ");
+                    List<String> li = new ArrayList<String>();
+                    Collections.addAll(li, ex);
+                    Log.d("percentDebug"," "+li.get(li.size()-1));
+//                    first = Double.parseDouble(txtExpression.getText().toString());
+                    first = Double.parseDouble(li.get(li.size()-1));
+                    first *= 0.01;
+                    String result = String.valueOf(first);
+                    txtResult.setText(result);
+                    txtExpression.setText(result);
+
+                } else {
+                    first = Double.parseDouble(txtResult.getText().toString());
+                    first *= 0.01;
+                    String result = String.valueOf(first);
+                    txtResult.setText(result);
+                    txtExpression.setText(result);
+                }
+
+            }else{
+                Toast.makeText(getApplicationContext(),"수식을 확인해주세요.",Toast.LENGTH_SHORT).show();;
+                return;
+            }
+        }else{
             Toast.makeText(getApplicationContext(),"연산할 숫자가 없습니다.",Toast.LENGTH_SHORT).show();;
             return;
-        }else if(txtResult.length()!=0) {
-            first = Double.parseDouble(txtResult.getText().toString());
-        }else {
-            first = Double.parseDouble(txtExpression.getText().toString());
         }
-        first *= 0.01;
-        String result = String.valueOf(first);
-        txtResult.setText(result);
-        txtExpression.setText(result);
+
+
     }
 
     // Event Handling for Number Button
@@ -206,8 +237,13 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(),"연산자가 올 수 없습니다.",Toast.LENGTH_SHORT).show();;
                 return;
             }
-            checkList.add(0);
-            txtExpression.append(" " + str +" ");
+            if(str.equals("%")){
+                checkList.add(1);
+                txtExpression.append(" " + str);
+            }else {
+                checkList.add(0);
+                txtExpression.append(" "+str+ " ");
+            }
         }catch (Exception e){
             Log.e("addOperator",e.toString());
         }
@@ -235,6 +271,9 @@ public class MainActivity extends AppCompatActivity {
     int getWeight(String operator){
         int weight = 0;
         switch (operator) {
+            case "%":
+                weight=7;
+                break;
             case "x":
             case "/":
                 weight = 5;
@@ -299,10 +338,13 @@ public class MainActivity extends AppCompatActivity {
                         forPrint = postStack.pop();
                     }
                     break;
+                case"%":
+                    result.add("1");
                 case"+":
                 case"x":
                 case"/":
                 case"-":
+
                     while(!postStack.isEmpty() && getWeight(infixList.get(i))<=getWeight(postStack.peek())){
                         forPrint = postStack.pop();
                         result.add(forPrint);
@@ -340,6 +382,9 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 case "-":
                     result = first - second;
+                    break;
+                case "%":
+                    result = first * 0.01;
                     break;
             }
         }catch (Exception e){

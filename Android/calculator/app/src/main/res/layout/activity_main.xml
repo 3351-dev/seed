@@ -58,12 +58,12 @@
                     />
 
                 <Button
-                    android:id="@+id/btn_mod"
+                    android:id="@+id/btn_percent"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:backgroundTint="#3EBAB4B4"
                     android:text="%"
-                    android:onClick="percentClick"
+                    android:onClick="buttonClick"
                     android:textSize="18sp" />
 
                 <Button
