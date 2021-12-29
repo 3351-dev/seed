@@ -1,9 +1,11 @@
 package com.example.androidalarm;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,10 +17,11 @@ import androidx.recyclerview.widget.RecyclerViewAccessibilityDelegate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class fragment_view_1 extends Fragment {
+public class fragment_view_1 extends Fragment implements recyclerAdapter.RecyclerViewClickListener{
 
     private RecyclerView recyclerView;
     private List<CardItem> dataList;
+    private recyclerAdapter mAdapter;
 
     @Nullable
     @Override
@@ -32,6 +35,12 @@ public class fragment_view_1 extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(recyclerAdapter);
 
+
+        mAdapter = new recyclerAdapter(dataList);
+        mAdapter.setOnClickListener(this);
+        recyclerView.setAdapter(mAdapter);
+
+
         return rootView;
     }
 
@@ -42,5 +51,24 @@ public class fragment_view_1 extends Fragment {
         dataList.add(new CardItem("First","Android Boy"));
         dataList.add(new CardItem("Second","one\nTwo"));
         dataList.add(new CardItem("Third","1\n2\n3"));
+
     }
+
+    public void onItemClicked(int position){
+        Log.d(" ","Item : "+position);
+    }
+
+    public void onShareButtonClicked(int position){
+        Log.d(" ", "share : "+position);
+        //Item Add
+        mAdapter.addItem(position, new CardItem("Add","Add"));
+    }
+
+    public void onLearnMoreButtonClicked(int position) {
+        Log.d(" ","More : " + position);
+        mAdapter.removeItem(position);
+    }
+
+
+
 }

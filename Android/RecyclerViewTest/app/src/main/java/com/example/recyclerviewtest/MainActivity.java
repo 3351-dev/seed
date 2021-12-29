@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity implements recyclerAdapter.R
 
     private static final String TAG = MainActivity.class.getSimpleName();
     private recyclerAdapter mAdapter;
-    LinearLayout expandable_view;
+//    LinearLayout expandable_view;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity implements recyclerAdapter.R
         recyclerView.setAdapter(mAdapter);
 
         // Expand View
-        expandable_view = findViewById(R.id.expandable_view);
+//        expandable_view = findViewById(R.id.expandable_view);
 
     }
 

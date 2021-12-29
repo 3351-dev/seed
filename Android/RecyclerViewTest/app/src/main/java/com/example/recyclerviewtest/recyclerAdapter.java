@@ -42,8 +42,8 @@ public class recyclerAdapter extends RecyclerView.Adapter<recyclerAdapter.ViewHo
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_card, parent, false);
 
-        expandable_view = view.findViewById(R.id.expandable_view);
-        Log.d("3351 "," "+expandable_view.getVisibility());
+//        expandable_view = view.findViewById(R.id.expandable_view);
+//        Log.d("3351 "," "+expandable_view.getVisibility());
 
         return new ViewHolder(view);
     }
@@ -61,9 +61,10 @@ public class recyclerAdapter extends RecyclerView.Adapter<recyclerAdapter.ViewHo
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    expandable_view = view.findViewById(R.id.expandable_view);
                     mListener.onItemClicked(pos);
-                    // 펼침, 접음   문제있음;;
-                    Log.d("view","Item : "+ expandable_view.getVisibility());
+//                    Log.d("view","Item : "+ pos);
+//                    Log.d("view","Item : "+ expandable_view.getVisibility());
                     if(expandable_view.getVisibility() == View.GONE){
                         expandable_view.setVisibility(View.VISIBLE);
                     }else{
