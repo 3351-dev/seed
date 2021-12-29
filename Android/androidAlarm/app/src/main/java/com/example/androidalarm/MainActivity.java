@@ -4,11 +4,16 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.view.View;
 
 import com.google.android.material.tabs.TabLayout;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends FragmentActivity {
 
@@ -67,15 +72,15 @@ public class MainActivity extends FragmentActivity {
 
             @Override
             public void onTabUnselected(TabLayout.Tab tab){
-
             }
 
             @Override
             public void onTabReselected(TabLayout.Tab tab){
-
             }
 
         });
+
+
 
     }
 
