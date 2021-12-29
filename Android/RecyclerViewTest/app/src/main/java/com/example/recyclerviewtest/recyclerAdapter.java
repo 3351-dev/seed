@@ -1,8 +1,11 @@
 package com.example.recyclerviewtest;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -14,8 +17,22 @@ import java.util.List;
 public class recyclerAdapter extends RecyclerView.Adapter<recyclerAdapter.ViewHolder>{
 
     private final List<CardItem> mDateList;
+    private RecyclerViewClickListener mListener;
+    LinearLayout expandable_view;
+
     public recyclerAdapter(List<CardItem> dataList){
         mDateList = dataList;
+    }
+
+    public void setOnClickListener(RecyclerViewClickListener listener){
+        mListener = listener;
+    }
+
+    public interface RecyclerViewClickListener{
+//       아이템 클릭 처리
+        void onItemClicked(int position);
+        void onShareButtonClicked(int position);
+        void onLearnMoreButtonClicked(int position);
     }
 
 
@@ -24,6 +41,9 @@ public class recyclerAdapter extends RecyclerView.Adapter<recyclerAdapter.ViewHo
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_card, parent, false);
+
+        expandable_view = view.findViewById(R.id.expandable_view);
+        Log.d("3351 "," "+expandable_view.getVisibility());
 
         return new ViewHolder(view);
     }
@@ -34,6 +54,37 @@ public class recyclerAdapter extends RecyclerView.Adapter<recyclerAdapter.ViewHo
         CardItem item = mDateList.get(position);
         holder.title.setText(item.getTitle());
         holder.contents.setText(item.getContents());
+
+        if(mListener != null){
+            //현재 위치
+            final int pos = position;
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mListener.onItemClicked(pos);
+                    // 펼침, 접음   문제있음;;
+                    Log.d("view","Item : "+ expandable_view.getVisibility());
+                    if(expandable_view.getVisibility() == View.GONE){
+                        expandable_view.setVisibility(View.VISIBLE);
+                    }else{
+                        expandable_view.setVisibility(View.GONE);
+                    }
+                }
+            });
+            holder.share.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mListener.onShareButtonClicked(pos);
+                }
+            });
+            holder.more.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mListener.onLearnMoreButtonClicked(pos);
+                }
+            });
+
+        }
 
     }
 
@@ -48,11 +99,26 @@ public class recyclerAdapter extends RecyclerView.Adapter<recyclerAdapter.ViewHo
     public static class ViewHolder extends RecyclerView.ViewHolder{
         TextView title;
         TextView contents;
+        Button share;
+        Button more;
         public ViewHolder(View itemView){
             super(itemView);
             title = (TextView) itemView.findViewById(R.id.title_text);
             contents = (TextView) itemView.findViewById(R.id.contents_text);
+            share = (Button) itemView.findViewById(R.id.share_button);
+            more = (Button) itemView.findViewById(R.id.more_button);
 
         }
+    }
+    //  애니메이션 추가
+    public void removeItem(int position){
+        mDateList.remove(position);
+        notifyItemRemoved(position);
+        notifyItemRangeChanged(position,mDateList.size());
+    }
+    public void addItem(int position, CardItem item){
+        mDateList.add(position, item);
+        notifyItemInserted(position);
+        notifyItemRangeChanged(position, mDateList.size());
     }
 }

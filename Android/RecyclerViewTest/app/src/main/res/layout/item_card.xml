@@ -9,11 +9,14 @@
     android:layout_marginTop="8dp"
     app:cardCornerRadius="4dp"
     app:cardElevation="8dp"
+    android:background="?android:attr/selectableItemBackground"
     >
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:background="?android:attr/selectableItemBackground"
+        >
 
 <!--        Top-->
         <RelativeLayout
@@ -40,22 +43,26 @@
 
 <!--        Button-->
         <LinearLayout
+            android:id="@+id/expandable_view"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            >
             <Button
                 android:id="@+id/share_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="#00ffffff"
-                android:text="Share"
+                android:background="?android:attr/selectableItemBackground"
+                android:text="Add"
                 android:textColor="@color/black"/>
             <Button
                 android:id="@+id/more_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="#00ffffff"
-                android:text="learn more"
-                android:textColor="#0091ea"/>
+                android:text="delete"
+                android:textColor="#0091ea"
+                android:background="?android:attr/selectableItemBackground"
+                />
         </LinearLayout>
 
     </LinearLayout>

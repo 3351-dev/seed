@@ -51,7 +51,7 @@ public class MainActivity extends FragmentActivity {
         tabs.addTab(tabs.newTab().setText("Alarm"));
         tabs.addTab(tabs.newTab().setText("Clock"));
         tabs.addTab(tabs.newTab().setText("Timer"));
-        tabs.addTab(tabs.newTab().setText("Stopwatch"));
+        tabs.addTab(tabs.newTab().setText("Stop watch"));
 
         tabs.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
