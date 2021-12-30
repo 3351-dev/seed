@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
@@ -31,6 +32,7 @@ public class fragment_view_1 extends Fragment implements recyclerAdapter.Recycle
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_view_1, container, false);
 
         recyclerView = rootView.findViewById(R.id.connect_recyclerview);
+        // RecyclerView Adapter
         recyclerAdapter recyclerAdapter = new recyclerAdapter(dataList);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(recyclerAdapter);
@@ -44,9 +46,11 @@ public class fragment_view_1 extends Fragment implements recyclerAdapter.Recycle
         return rootView;
     }
 
+    // 어댑터 설정
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // 표시할 데이터
         dataList = new ArrayList<>();
         dataList.add(new CardItem("First","Android Boy"));
         dataList.add(new CardItem("Second","one\nTwo"));
@@ -61,14 +65,17 @@ public class fragment_view_1 extends Fragment implements recyclerAdapter.Recycle
     public void onShareButtonClicked(int position){
         Log.d(" ", "share : "+position);
         //Item Add
-        mAdapter.addItem(position, new CardItem("Add","Add"));
+        mAdapter.addItem(position+1, new CardItem("Add","Add"+position));
     }
 
-    public void onLearnMoreButtonClicked(int position) {
-        Log.d(" ","More : " + position);
+    public void onDeleteButtonClicked(int position) {
+        Log.d(" ","delete : " + position);
         mAdapter.removeItem(position);
     }
 
-
+    @Override
+    public void onRepeatCheckboxClicked(int position) {
+        Log.d(" ","Item : "+position+10);
+    }
 
 }
