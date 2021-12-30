@@ -26,5 +26,4 @@
 
 * setTextColor   
 ![Screenshot from 2021-12-30 18-02-10](https://user-images.githubusercontent.com/93642972/147738012-3f5f04d6-c48b-4095-94df-fda5b4538b1b.png)
-
 ![Screenshot from 2021-12-30 18-06-30](https://user-images.githubusercontent.com/93642972/147738087-bba4f1f2-c85a-454b-90ac-e6f37ca29c8a.png)
