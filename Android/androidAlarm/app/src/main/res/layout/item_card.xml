@@ -31,7 +31,9 @@
                 android:padding="16dp"
                 android:text="Title"
                 android:textColor="@color/black"
-                android:textSize="24sp"/>
+                android:textSize="24sp"
+                android:background="?android:attr/selectableItemBackground"
+                />
 
             <Switch
                 android:id="@+id/OnOff_btn"
@@ -51,7 +53,7 @@
             android:layout_height="wrap_content"
             android:padding="16dp"
             android:text="Simple Text"
-            android:visibility="gone"
+
             />
 
         <!--        Button-->
@@ -63,6 +65,7 @@
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
+            android:visibility="gone"
             >
 <!--            android:visibility="gone"-->
 
@@ -71,7 +74,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Repeat"
-                android:checked="true"
+                android:checked="false"
+
                 />
             <!--            android:visibility="gone"-->
             <LinearLayout
@@ -83,7 +87,7 @@
                 android:layout_marginEnd="8dp"
                 android:layout_marginTop="8dp"
                 android:weightSum="7"
-                android:visibility="visible"
+                android:visibility="gone"
                 >
                 <ToggleButton
                     android:id="@+id/sun_btn"
@@ -173,7 +177,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
                 >
-                <Button
+                <TextView
                     android:gravity="left|center_vertical"
                     android:id="@+id/select_ring"
                     android:layout_width="wrap_content"
@@ -192,11 +196,12 @@
                     />
 
             </RelativeLayout>
-            <Button
-                android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/label_view"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
-                android:textSize="15sp"
+                android:textSize="20sp"
                 android:text="Label"
                 android:background="?android:attr/selectableItemBackground"
                 android:gravity="left|center_vertical"
@@ -213,6 +218,7 @@
                 android:textColor="#00ea37"
                 android:gravity="left|center_vertical"
                 android:layout_marginStart="8dp"
+                android:visibility="gone"
                 />
             <Button
                 android:id="@+id/delete_button"

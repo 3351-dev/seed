@@ -1,9 +1,16 @@
 package com.example.androidalarm;
 
+import android.app.AlarmManager;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.icu.text.CaseMap;
+import android.icu.text.DateFormat;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,26 +18,31 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.Calendar;
 import java.util.List;
 
 public class recyclerAdapter extends RecyclerView.Adapter<recyclerAdapter.ViewHolder> {
 
-
+//    private Context context;
     private final List<CardItem> mDataList;
     private RecyclerViewClickListener mListener;
     LinearLayout expandable_view;
     TextView contents_view;
     CheckBox repeat_checkbox;
 //    LinearLayout repeat_btn_view;
+
 
 
 
@@ -89,6 +101,7 @@ public class recyclerAdapter extends RecyclerView.Adapter<recyclerAdapter.ViewHo
                     }
                 }
             });
+
             holder.share.setOnClickListener(new View.OnClickListener(){
 
                 @Override
@@ -112,12 +125,26 @@ public class recyclerAdapter extends RecyclerView.Adapter<recyclerAdapter.ViewHo
                     repeat_checkbox = view.findViewById(R.id.repeat_checkbox);
 //                    repeat_btn_view = view.findViewById(R.id.repeat_btn_view);    // Question 왜 이렇게 받으면 안되나요
 //                    mListener.onRepeatCheckboxClicked(pos);
+
+
                     if(repeat_checkbox.isChecked()){
                         Log.d("3351","Checked " + pos );
                         holder.repeat_view.setVisibility(View.VISIBLE);
+                        // repeat init
+                        holder.sun.setChecked(true);
                     }else{
                         Log.d("3351","UnChecked "  + pos);
                         holder.repeat_view.setVisibility(View.GONE);
+                        {
+                            holder.sun.setChecked(false);
+                            holder.mon.setChecked(false);
+                            holder.tue.setChecked(false);
+                            holder.wed.setChecked(false);
+                            holder.thu.setChecked(false);
+                            holder.fri.setChecked(false);
+                            holder.sat.setChecked(false);
+
+                        }
                     }
                 }
 
@@ -167,6 +194,8 @@ public class recyclerAdapter extends RecyclerView.Adapter<recyclerAdapter.ViewHo
         ToggleButton fri;
         ToggleButton sat;
         ToggleButton sun;
+        TextView label_view;
+        TextView contents_view;
 
 
         public ViewHolder(View itemView) {
@@ -178,6 +207,8 @@ public class recyclerAdapter extends RecyclerView.Adapter<recyclerAdapter.ViewHo
             repeat = (CheckBox) itemView.findViewById(R.id.repeat_checkbox);
             repeat_view = (LinearLayout) itemView.findViewById(R.id.repeat_btn_view);
             OnOff = (Switch) itemView.findViewById(R.id.OnOff_btn);
+            label_view = (TextView)itemView.findViewById(R.id.label_view);
+
 
             mon = (ToggleButton) itemView.findViewById(R.id.mon_btn);
             tue = (ToggleButton) itemView.findViewById(R.id.tue_btn);
@@ -197,7 +228,18 @@ public class recyclerAdapter extends RecyclerView.Adapter<recyclerAdapter.ViewHo
                         Log.d("toggle","off");
                         b = false;
                     }
+                    {
+                        if (!sun.isChecked() && !mon.isChecked()
+                                && !tue.isChecked() && !wed.isChecked()
+                                && !thu.isChecked() && !fri.isChecked()
+                                && !sat.isChecked()){
+                            Log.d(" ", "repeat off");
+                            repeat.setChecked(false);
+                            repeat_view.setVisibility(View.GONE);
+                        }
+                    }
                 }
+
             });
             tue.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
@@ -208,6 +250,16 @@ public class recyclerAdapter extends RecyclerView.Adapter<recyclerAdapter.ViewHo
                     }else{
                         Log.d("toggle","off");
                         b = false;
+                    }
+                    {
+                        if (!sun.isChecked() && !mon.isChecked()
+                                && !tue.isChecked() && !wed.isChecked()
+                                && !thu.isChecked() && !fri.isChecked()
+                                && !sat.isChecked()){
+                            Log.d(" ", "repeat off");
+                            repeat.setChecked(false);
+                            repeat_view.setVisibility(View.GONE);
+                        }
                     }
                 }
             });
@@ -221,19 +273,40 @@ public class recyclerAdapter extends RecyclerView.Adapter<recyclerAdapter.ViewHo
                         Log.d("toggle","off");
                         b = false;
                     }
+                    {
+                        if (!sun.isChecked() && !mon.isChecked()
+                                && !tue.isChecked() && !wed.isChecked()
+                                && !thu.isChecked() && !fri.isChecked()
+                                && !sat.isChecked()){
+                            Log.d(" ", "repeat off");
+                            repeat.setChecked(false);
+                            repeat_view.setVisibility(View.GONE);
+                        }
+                    }
                 }
             });
             thu.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                    if(b){
-                        Log.d("toggle","on");
+                    if (b) {
+                        Log.d("toggle", "on");
                         b = true;
-                    }else{
-                        Log.d("toggle","off");
+                    } else {
+                        Log.d("toggle", "off");
                         b = false;
                     }
+                    {
+                        if (!sun.isChecked() && !mon.isChecked()
+                                && !tue.isChecked() && !wed.isChecked()
+                                && !thu.isChecked() && !fri.isChecked()
+                                && !sat.isChecked()){
+                            Log.d(" ", "repeat off");
+                            repeat.setChecked(false);
+                            repeat_view.setVisibility(View.GONE);
+                        }
+                    }
                 }
+
             });
             fri.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
@@ -245,7 +318,18 @@ public class recyclerAdapter extends RecyclerView.Adapter<recyclerAdapter.ViewHo
                         Log.d("toggle","off");
                         b = false;
                     }
+                    {
+                        if (!sun.isChecked() && !mon.isChecked()
+                                && !tue.isChecked() && !wed.isChecked()
+                                && !thu.isChecked() && !fri.isChecked()
+                                && !sat.isChecked()){
+                            Log.d(" ", "repeat off");
+                            repeat.setChecked(false);
+                            repeat_view.setVisibility(View.GONE);
+                        }
+                    }
                 }
+
             });
             sat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
@@ -257,7 +341,18 @@ public class recyclerAdapter extends RecyclerView.Adapter<recyclerAdapter.ViewHo
                         Log.d("toggle","off");
                         b = false;
                     }
+                    {
+                        if (!sun.isChecked() && !mon.isChecked()
+                                && !tue.isChecked() && !wed.isChecked()
+                                && !thu.isChecked() && !fri.isChecked()
+                                && !sat.isChecked()){
+                            Log.d(" ", "repeat off");
+                            repeat.setChecked(false);
+                            repeat_view.setVisibility(View.GONE);
+                        }
+                    }
                 }
+
             });
             sun.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
@@ -269,9 +364,50 @@ public class recyclerAdapter extends RecyclerView.Adapter<recyclerAdapter.ViewHo
                         Log.d("toggle","off");
                         b = false;
                     }
+                    {
+                        if (!sun.isChecked() && !mon.isChecked()
+                                && !tue.isChecked() && !wed.isChecked()
+                                && !thu.isChecked() && !fri.isChecked()
+                                && !sat.isChecked()){
+                            Log.d(" ", "repeat off");
+                            repeat.setChecked(false);
+                            repeat_view.setVisibility(View.GONE);
+                        }
+                    }
+                }
+
+            });
+            label_view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    AlertDialog.Builder alert = new AlertDialog.Builder(view.getContext());
+                    alert.setTitle("Label");
+
+                    final EditText usercontents = new EditText(view.getContext());
+                    alert.setView(usercontents);
+
+                    alert.setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            String userContents = usercontents.getText().toString();
+                            contents.setText(userContents);
+                            Log.d("AlertDialog"," "+userContents);
+                        }
+                    });
+
+                    alert.show();
+
                 }
             });
+            title.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Log.d("title", "title clicked");
+                    TimePickerFragment timePickerFragment = new TimePickerFragment();
+                    timePickerFragment.show(getSupportFragmentManager(), " timePicker");
 
+                }
+            });
         }
     }
     //  애니메이션 추가
@@ -286,10 +422,26 @@ public class recyclerAdapter extends RecyclerView.Adapter<recyclerAdapter.ViewHo
         notifyItemRangeChanged(position, mDataList.size());
     }
 
-    public void dayOfWeek(View view){
-        switch ((view.getId())){
-            case R.id.mon_btn:
-                Log.d("dayOfWeek", " Mon");
+    public static class TimePickerFragment extends DialogFragment implements TimePickerDialog.OnTimeSetListener{
+        private AlarmManager mAlarmManager;
+
+        public Dialog onCreateDialog(Bundle savedInstanceState){
+            mAlarmManager = (AlarmManager)  getContext().getSystemService(Context.ALARM_SERVICE);
+
+            final Calendar c = Calendar.getInstance();
+            int hour = c.get(Calendar.HOUR_OF_DAY);
+            int minute = c.get(Calendar.MINUTE);
+
+            return new TimePickerDialog(getContext(),
+                    AlertDialog.THEME_HOLO_DARK,
+                    this, hour, minute,
+                    DateFormat.is24HourFormat(getContext()));
+        }
+
+        @Override
+        public void onTimeSet(TimePicker timePicker, int i, int i1) {
+
         }
     }
+
 }
