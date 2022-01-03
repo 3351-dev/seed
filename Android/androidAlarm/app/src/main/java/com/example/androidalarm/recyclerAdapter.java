@@ -1,16 +1,9 @@
 package com.example.androidalarm;
 
-import android.app.AlarmManager;
 import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
-import android.icu.text.CaseMap;
-import android.icu.text.DateFormat;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,21 +15,21 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.Calendar;
 import java.util.List;
 
 public class recyclerAdapter extends RecyclerView.Adapter<recyclerAdapter.ViewHolder> {
 
 //    private Context context;
     private final List<CardItem> mDataList;
+    final Context mContext;
     private RecyclerViewClickListener mListener;
     LinearLayout expandable_view;
     TextView contents_view;
@@ -46,8 +39,9 @@ public class recyclerAdapter extends RecyclerView.Adapter<recyclerAdapter.ViewHo
 
 
 
-    public recyclerAdapter(List<CardItem> DataList) {
+    public recyclerAdapter(List<CardItem> DataList, Context context) {
         this.mDataList = DataList;
+        this.mContext = context;
     }
 
     // Click Listener
@@ -166,6 +160,17 @@ public class recyclerAdapter extends RecyclerView.Adapter<recyclerAdapter.ViewHo
                 }
             });
 
+            holder.title.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Log.d("title", "title clicked");
+                    TimePickerFragment timePickerFragment = new TimePickerFragment();
+                    // Error!!!!!!!!!
+                    FragmentActivity activity = new FragmentActivity();
+                    timePickerFragment.show(activity.getSupportFragmentManager(), " timePicker");
+                }
+            });
+
 
         }
 
@@ -196,6 +201,7 @@ public class recyclerAdapter extends RecyclerView.Adapter<recyclerAdapter.ViewHo
         ToggleButton sun;
         TextView label_view;
         TextView contents_view;
+
 
 
         public ViewHolder(View itemView) {
@@ -394,20 +400,19 @@ public class recyclerAdapter extends RecyclerView.Adapter<recyclerAdapter.ViewHo
                             Log.d("AlertDialog"," "+userContents);
                         }
                     });
-
                     alert.show();
-
                 }
             });
-            title.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Log.d("title", "title clicked");
-                    TimePickerFragment timePickerFragment = new TimePickerFragment();
-                    timePickerFragment.show(getSupportFragmentManager(), " timePicker");
-
-                }
-            });
+//            title.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    Log.d("title", "title clicked");
+////                    TimePickerFragment timePickerFragment = new TimePickerFragment();
+////                    // Error!!!!!!!!!
+////                    FragmentActivity activity = new FragmentActivity();
+////                    timePickerFragment.show(activity.getSupportFragmentManager(), " timePicker");
+//                }
+//            });
         }
     }
     //  애니메이션 추가
@@ -422,26 +427,29 @@ public class recyclerAdapter extends RecyclerView.Adapter<recyclerAdapter.ViewHo
         notifyItemRangeChanged(position, mDataList.size());
     }
 
-    public static class TimePickerFragment extends DialogFragment implements TimePickerDialog.OnTimeSetListener{
-        private AlarmManager mAlarmManager;
-
-        public Dialog onCreateDialog(Bundle savedInstanceState){
-            mAlarmManager = (AlarmManager)  getContext().getSystemService(Context.ALARM_SERVICE);
-
-            final Calendar c = Calendar.getInstance();
-            int hour = c.get(Calendar.HOUR_OF_DAY);
-            int minute = c.get(Calendar.MINUTE);
-
-            return new TimePickerDialog(getContext(),
-                    AlertDialog.THEME_HOLO_DARK,
-                    this, hour, minute,
-                    DateFormat.is24HourFormat(getContext()));
-        }
-
-        @Override
-        public void onTimeSet(TimePicker timePicker, int i, int i1) {
-
-        }
-    }
+//    public static class TimePickerFragment extends DialogFragment implements TimePickerDialog.OnTimeSetListener{
+//        private AlarmManager mAlarmManager;
+//
+//        public Dialog onCreateDialog(Bundle savedInstanceState){
+//            mAlarmManager = (AlarmManager)  getContext().getSystemService(Context.ALARM_SERVICE);
+//
+//            final Calendar c = Calendar.getInstance();
+//            int hour = c.get(Calendar.HOUR_OF_DAY);
+//            int minute = c.get(Calendar.MINUTE);
+//
+//            return new TimePickerDialog(getContext(),
+//                    AlertDialog.THEME_HOLO_DARK,
+//                    this, hour, minute,
+//                    DateFormat.is24HourFormat(getContext()));
+//        }
+//
+//        @Override
+//        public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
+//            Calendar calendar = Calendar.getInstance();
+//            calendar.set(Calendar.HOUR_OF_DAY,hourOfDay);
+//            calendar.set(Calendar.MINUTE,minute);
+//
+//        }
+//    }
 
 }

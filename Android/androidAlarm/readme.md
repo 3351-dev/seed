@@ -29,3 +29,15 @@
 ![Screenshot from 2021-12-30 18-06-30](https://user-images.githubusercontent.com/93642972/147738087-bba4f1f2-c85a-454b-90ac-e6f37ca29c8a.png)
 
 # 1231
+
+### AlertDialog
+
+* https://answerofgod.tistory.com/83
+
+# 0103
+
+### Timepicker ADD   
+* Error   
+	* getSupportFragmentManager : Fragment Activity의 메소드   
+	* ViewHolder에서 구현하려고 하니 잘 되지 않네요..   
+	

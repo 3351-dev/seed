@@ -33,12 +33,12 @@ public class fragment_view_1 extends Fragment implements recyclerAdapter.Recycle
 
         recyclerView = rootView.findViewById(R.id.connect_recyclerview);
         // RecyclerView Adapter
-        recyclerAdapter recyclerAdapter = new recyclerAdapter(dataList);
+        recyclerAdapter recyclerAdapter = new recyclerAdapter(dataList,getContext());
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(recyclerAdapter);
 
 
-        mAdapter = new recyclerAdapter(dataList);
+        mAdapter = new recyclerAdapter(dataList,getContext());
         mAdapter.setOnClickListener(this);
         recyclerView.setAdapter(mAdapter);
 
