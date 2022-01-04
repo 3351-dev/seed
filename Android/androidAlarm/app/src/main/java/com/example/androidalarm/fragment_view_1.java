@@ -1,5 +1,6 @@
 package com.example.androidalarm;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -7,10 +8,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.RecyclerViewAccessibilityDelegate;
@@ -23,6 +27,7 @@ public class fragment_view_1 extends Fragment implements recyclerAdapter.Recycle
     private RecyclerView recyclerView;
     private List<CardItem> dataList;
     private recyclerAdapter mAdapter;
+    private FragmentActivity myContext;
 
     @Nullable
     @Override
@@ -44,6 +49,13 @@ public class fragment_view_1 extends Fragment implements recyclerAdapter.Recycle
 
 
         return rootView;
+    }
+
+    @Override
+    public void onAttach(Activity activity){
+        myContext = (FragmentActivity) activity;
+        super.onAttach(activity);
+
     }
 
     // 어댑터 설정
@@ -76,6 +88,14 @@ public class fragment_view_1 extends Fragment implements recyclerAdapter.Recycle
     @Override
     public void onRepeatCheckboxClicked(int position) {
         Log.d(" ","Item : "+position+10);
+    }
+
+    @Override
+    public void onTitleClicked() {
+        Log.d(" "," Title Clicked");
+        FragmentManager fragmentManager = myContext.getSupportFragmentManager();
+        TimePickerFragment timePickerFragment = new TimePickerFragment();
+        timePickerFragment.show(fragmentManager, " timePicker");
     }
 
 }

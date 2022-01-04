@@ -41,3 +41,19 @@
 	* getSupportFragmentManager : Fragment Activity의 메소드   
 	* ViewHolder에서 구현하려고 하니 잘 되지 않네요..   
 	
+# 0104
+
+### Timepicker ADD
+* recyclerAdapter에서 fragment_view_1에서 처리하도록 넘겨주었다.   
+	private FragmentActivity myContext;   
+	선언 후 밑 구문 추가   
+	   		   
+	@Override
+	public void onAttach(Activity activity){
+		myContext = (FragmentActivity) activity;
+		super.onAttach(activity);
+	}   
+	이후 클릭했을때 이벤트 출력   
+	FragmentManager fragmentManager = myContext.getSupportFragmentManager();   
+	
+

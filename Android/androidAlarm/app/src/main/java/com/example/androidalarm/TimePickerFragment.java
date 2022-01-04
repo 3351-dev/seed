@@ -8,6 +8,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.format.DateFormat;
+import android.util.Log;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -45,6 +47,7 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
         Intent intent = new Intent(getContext(), recyclerAdapter.class);
         PendingIntent operation = PendingIntent.getActivity(getContext(), 0, intent, 0);
 
+        Log.d(" ","Alarm Clicked");
         mAlarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), operation);
     }
 }

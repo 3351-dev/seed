@@ -54,6 +54,8 @@ public class recyclerAdapter extends RecyclerView.Adapter<recyclerAdapter.ViewHo
         void onShareButtonClicked(int position);
         void onDeleteButtonClicked(int position);
         void onRepeatCheckboxClicked(int position);
+
+        void onTitleClicked();
     }
 
 
@@ -126,19 +128,6 @@ public class recyclerAdapter extends RecyclerView.Adapter<recyclerAdapter.ViewHo
                         holder.repeat_view.setVisibility(View.VISIBLE);
                         // repeat init
                         holder.sun.setChecked(true);
-                    }else{
-                        Log.d("3351","UnChecked "  + pos);
-                        holder.repeat_view.setVisibility(View.GONE);
-                        {
-                            holder.sun.setChecked(false);
-                            holder.mon.setChecked(false);
-                            holder.tue.setChecked(false);
-                            holder.wed.setChecked(false);
-                            holder.thu.setChecked(false);
-                            holder.fri.setChecked(false);
-                            holder.sat.setChecked(false);
-
-                        }
                     }
                 }
 
@@ -163,11 +152,13 @@ public class recyclerAdapter extends RecyclerView.Adapter<recyclerAdapter.ViewHo
             holder.title.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Log.d("title", "title clicked");
-                    TimePickerFragment timePickerFragment = new TimePickerFragment();
-                    // Error!!!!!!!!!
+//                    Log.d("title", "title clicked");
+//                    TimePickerFragment timePickerFragment = new TimePickerFragment();
+                    mListener.onTitleClicked();
+                    /*
                     FragmentActivity activity = new FragmentActivity();
                     timePickerFragment.show(activity.getSupportFragmentManager(), " timePicker");
+                     */
                 }
             });
 
