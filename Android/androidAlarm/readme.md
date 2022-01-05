@@ -44,16 +44,27 @@
 # 0104
 
 ### Timepicker ADD
-* recyclerAdapter에서 fragment_view_1에서 처리하도록 넘겨주었다.   
+* recyclerAdapter에서 fragment_view_1에서 처리하도록 넘겨주었다.      
 	private FragmentActivity myContext;   
 	선언 후 밑 구문 추가   
 	   		   
-	@Override
-	public void onAttach(Activity activity){
-		myContext = (FragmentActivity) activity;
-		super.onAttach(activity);
-	}   
+	@Override   
+	public void onAttach(Activity activity){   
+		myContext = (FragmentActivity) activity;   
+		super.onAttach(activity);   
+	}      
 	이후 클릭했을때 이벤트 출력   
 	FragmentManager fragmentManager = myContext.getSupportFragmentManager();   
+	   
+* 참고   
+	http://daplus.net/android-%ED%94%84%EB%9E%98%EA%B7%B8%EB%A8%BC%ED%8A%B8%EC%97%90%EC%84%9C-getsupportfragmentmanager-%EC%97%90-%EC%96%B4%EB%96%BB%EA%B2%8C-%EC%95%A1%EC%84%B8%EC%8A%A4-%ED%95%A0-%EC%88%98-%EC%9E%88/   
 	
+# 0105
+
+### Fragment ~ Fragment 값 전달   
+* Intent : 데이터를 전달   
+* Bundle : 데이터를 저장   
+* Bundle을 이용해서 값 반환   
+* https://fjdkslvn.tistory.com/14   
+
 

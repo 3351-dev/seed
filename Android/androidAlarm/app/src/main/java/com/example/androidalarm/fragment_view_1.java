@@ -1,14 +1,15 @@
 package com.example.androidalarm;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,7 +18,9 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.RecyclerViewAccessibilityDelegate;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +31,9 @@ public class fragment_view_1 extends Fragment implements recyclerAdapter.Recycle
     private List<CardItem> dataList;
     private recyclerAdapter mAdapter;
     private FragmentActivity myContext;
+    private SharedPreferences mPreferences;
+    private FloatingActionButton fab;
+    private RelativeLayout rl1;
 
     @Nullable
     @Override
@@ -36,17 +42,46 @@ public class fragment_view_1 extends Fragment implements recyclerAdapter.Recycle
                              @NonNull Bundle savedInstanceState){
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_view_1, container, false);
 
+        rl1 = rootView.findViewById(R.id.relative1);
+        fab = (FloatingActionButton) rootView.findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int pos = 0;
+                Log.d("fabClickTest", "fab click");
+                for(int i=0;i<dataList.size();i++){
+                    pos++;
+                }
+                onTitleClicked(pos);
+            }
+        });
+
         recyclerView = rootView.findViewById(R.id.connect_recyclerview);
         // RecyclerView Adapter
         recyclerAdapter recyclerAdapter = new recyclerAdapter(dataList,getContext());
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(recyclerAdapter);
 
-
         mAdapter = new recyclerAdapter(dataList,getContext());
         mAdapter.setOnClickListener(this);
         recyclerView.setAdapter(mAdapter);
 
+        mPreferences = PreferenceManager.getDefaultSharedPreferences(myContext);
+        SharedPreferences.Editor editor = mPreferences.edit();
+
+        // Bundle
+        if(getArguments()!= null){
+            int pos=0;
+            String hour, minute;
+            hour = getArguments().getString("hour");
+            minute = getArguments().getString("minute");
+            Log.d("Fragment_view_1","bundle : "+hour);
+            for(int i=0;i<dataList.size();i++){
+                pos++;
+            }
+            dataList.add(new CardItem(hour+":"+minute,""+pos));
+            Snackbar.make(rootView.findViewById(R.id.relative1),"Snack",Snackbar.LENGTH_SHORT).show();
+        }
 
         return rootView;
     }
@@ -86,16 +121,15 @@ public class fragment_view_1 extends Fragment implements recyclerAdapter.Recycle
     }
 
     @Override
-    public void onRepeatCheckboxClicked(int position) {
-        Log.d(" ","Item : "+position+10);
-    }
-
-    @Override
-    public void onTitleClicked() {
-        Log.d(" "," Title Clicked");
+    public void onTitleClicked(int position) {
+        Log.d("fragment","title pos : "+position);
         FragmentManager fragmentManager = myContext.getSupportFragmentManager();
         TimePickerFragment timePickerFragment = new TimePickerFragment();
+        // setTargetFragment use
+//        timePickerFragment.setTargetFragment(this, 0);
         timePickerFragment.show(fragmentManager, " timePicker");
+
     }
+
 
 }

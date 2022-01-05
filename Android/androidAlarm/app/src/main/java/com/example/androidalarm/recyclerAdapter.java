@@ -18,26 +18,20 @@ import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
 
 public class recyclerAdapter extends RecyclerView.Adapter<recyclerAdapter.ViewHolder> {
 
-//    private Context context;
     private final List<CardItem> mDataList;
     final Context mContext;
     private RecyclerViewClickListener mListener;
     LinearLayout expandable_view;
     TextView contents_view;
     CheckBox repeat_checkbox;
-//    LinearLayout repeat_btn_view;
-
-
-
 
     public recyclerAdapter(List<CardItem> DataList, Context context) {
         this.mDataList = DataList;
@@ -53,13 +47,12 @@ public class recyclerAdapter extends RecyclerView.Adapter<recyclerAdapter.ViewHo
         void onItemClicked(int position);
         void onShareButtonClicked(int position);
         void onDeleteButtonClicked(int position);
-        void onRepeatCheckboxClicked(int position);
-
-        void onTitleClicked();
+        void onTitleClicked(int pos);
     }
 
 
 
+    @NonNull
     @Override
     // 생성
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -78,23 +71,21 @@ public class recyclerAdapter extends RecyclerView.Adapter<recyclerAdapter.ViewHo
 
         if(mListener != null){
             final int pos = position;
-            holder.itemView.setOnClickListener(new View.OnClickListener(){
-                @Override
-                public void onClick(View view) {
-                    expandable_view = view.findViewById(R.id.expandable_view);
-                    contents_view = view.findViewById(R.id.contents_text);
-                    mListener.onItemClicked(pos);
-                    if(expandable_view.getVisibility() == View.GONE){
-                        expandable_view.setVisibility(View.VISIBLE);
-                        contents_view.setVisibility(View.GONE);
-                        Log.d("3351", "unFold " + pos);
+            holder.itemView.setOnClickListener(view -> {
+                expandable_view = view.findViewById(R.id.expandable_view);
+                contents_view = view.findViewById(R.id.contents_text);
+                mListener.onItemClicked(pos);
+                if(expandable_view.getVisibility() == View.GONE){
+                    expandable_view.setVisibility(View.VISIBLE);
+                    contents_view.setVisibility(View.GONE);
+                    Log.d("3351", "unFold " + pos);
 //                        Log.d("3351", "repeat btn "+repeat_btn_view.getVisibility());
-                    }else{
-                        expandable_view.setVisibility(View.GONE);
-                        contents_view.setVisibility(View.VISIBLE);
-                        Log.d("3351", "Fold "+pos);
+                }else{
+                    expandable_view.setVisibility(View.GONE);
+                    contents_view.setVisibility(View.VISIBLE);
+                    Log.d("3351", "Fold "+pos);
 //                        Log.d("3351", "repeat btn "+repeat_btn_view.getVisibility());
-                    }
+
                 }
             });
 
@@ -128,6 +119,8 @@ public class recyclerAdapter extends RecyclerView.Adapter<recyclerAdapter.ViewHo
                         holder.repeat_view.setVisibility(View.VISIBLE);
                         // repeat init
                         holder.sun.setChecked(true);
+                    }else{
+                        holder.repeat_view.setVisibility(View.GONE);
                     }
                 }
 
@@ -152,15 +145,11 @@ public class recyclerAdapter extends RecyclerView.Adapter<recyclerAdapter.ViewHo
             holder.title.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-//                    Log.d("title", "title clicked");
-//                    TimePickerFragment timePickerFragment = new TimePickerFragment();
-                    mListener.onTitleClicked();
-                    /*
-                    FragmentActivity activity = new FragmentActivity();
-                    timePickerFragment.show(activity.getSupportFragmentManager(), " timePicker");
-                     */
+                    Log.d("adapter","setText : "+holder.title.getText());
+                    mListener.onTitleClicked(pos);
                 }
             });
+
 
 
         }
@@ -195,6 +184,7 @@ public class recyclerAdapter extends RecyclerView.Adapter<recyclerAdapter.ViewHo
 
 
 
+
         public ViewHolder(View itemView) {
             super(itemView);
             title = (TextView) itemView.findViewById(R.id.title_text);
@@ -215,28 +205,24 @@ public class recyclerAdapter extends RecyclerView.Adapter<recyclerAdapter.ViewHo
             sat = (ToggleButton) itemView.findViewById(R.id.sat_btn);
             sun = (ToggleButton) itemView.findViewById(R.id.sun_btn);
 
-            mon.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                    if(b){
-                        Log.d("toggle","on");
-                        b = true;
-                    }else{
-                        Log.d("toggle","off");
-                        b = false;
-                    }
-                    {
-                        if (!sun.isChecked() && !mon.isChecked()
-                                && !tue.isChecked() && !wed.isChecked()
-                                && !thu.isChecked() && !fri.isChecked()
-                                && !sat.isChecked()){
-                            Log.d(" ", "repeat off");
-                            repeat.setChecked(false);
-                            repeat_view.setVisibility(View.GONE);
-                        }
+            mon.setOnCheckedChangeListener((compoundButton, b) -> {
+                if(b){
+                    Log.d("toggle","on");
+                    b = true;
+                }else{
+                    Log.d("toggle","off");
+                    b = false;
+                }
+                {
+                    if (!sun.isChecked() && !mon.isChecked()
+                            && !tue.isChecked() && !wed.isChecked()
+                            && !thu.isChecked() && !fri.isChecked()
+                            && !sat.isChecked()){
+                        Log.d(" ", "repeat off");
+                        repeat.setChecked(false);
+                        repeat_view.setVisibility(View.GONE);
                     }
                 }
-
             });
             tue.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
@@ -394,17 +380,10 @@ public class recyclerAdapter extends RecyclerView.Adapter<recyclerAdapter.ViewHo
                     alert.show();
                 }
             });
-//            title.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    Log.d("title", "title clicked");
-////                    TimePickerFragment timePickerFragment = new TimePickerFragment();
-////                    // Error!!!!!!!!!
-////                    FragmentActivity activity = new FragmentActivity();
-////                    timePickerFragment.show(activity.getSupportFragmentManager(), " timePicker");
-//                }
-//            });
+
+
         }
+
     }
     //  애니메이션 추가
     public void removeItem(int position){
@@ -418,29 +397,5 @@ public class recyclerAdapter extends RecyclerView.Adapter<recyclerAdapter.ViewHo
         notifyItemRangeChanged(position, mDataList.size());
     }
 
-//    public static class TimePickerFragment extends DialogFragment implements TimePickerDialog.OnTimeSetListener{
-//        private AlarmManager mAlarmManager;
-//
-//        public Dialog onCreateDialog(Bundle savedInstanceState){
-//            mAlarmManager = (AlarmManager)  getContext().getSystemService(Context.ALARM_SERVICE);
-//
-//            final Calendar c = Calendar.getInstance();
-//            int hour = c.get(Calendar.HOUR_OF_DAY);
-//            int minute = c.get(Calendar.MINUTE);
-//
-//            return new TimePickerDialog(getContext(),
-//                    AlertDialog.THEME_HOLO_DARK,
-//                    this, hour, minute,
-//                    DateFormat.is24HourFormat(getContext()));
-//        }
-//
-//        @Override
-//        public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
-//            Calendar calendar = Calendar.getInstance();
-//            calendar.set(Calendar.HOUR_OF_DAY,hourOfDay);
-//            calendar.set(Calendar.MINUTE,minute);
-//
-//        }
-//    }
 
 }

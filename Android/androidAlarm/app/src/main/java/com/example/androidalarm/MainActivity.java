@@ -8,12 +8,15 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class MainActivity extends FragmentActivity {
 
@@ -23,6 +26,7 @@ public class MainActivity extends FragmentActivity {
     fragment_view_2 fragment2;
     fragment_view_3 fragment3;
     fragment_view_4 fragment4;
+
 
 
     @Override
@@ -78,8 +82,9 @@ public class MainActivity extends FragmentActivity {
             public void onTabReselected(TabLayout.Tab tab){
             }
 
-        });
 
+
+        });
 
 
     }
