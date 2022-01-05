@@ -1,6 +1,7 @@
 package com.example.androidalarm;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -66,8 +67,10 @@ public class fragment_view_1 extends Fragment implements recyclerAdapter.Recycle
         mAdapter.setOnClickListener(this);
         recyclerView.setAdapter(mAdapter);
 
-        mPreferences = PreferenceManager.getDefaultSharedPreferences(myContext);
+//        mPreferences = PreferenceManager.getDefaultSharedPreferences(myContext);
+        mPreferences = getActivity().getSharedPreferences("UserInfo", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = mPreferences.edit();
+
 
         // Bundle
         if(getArguments()!= null){
@@ -80,10 +83,20 @@ public class fragment_view_1 extends Fragment implements recyclerAdapter.Recycle
                 pos++;
             }
             dataList.add(new CardItem(hour+":"+minute,""+pos));
-            Snackbar.make(rootView.findViewById(R.id.relative1),"Snack",Snackbar.LENGTH_SHORT).show();
+            editor.putString("TT", "value");
+            editor.commit();
+            getPreferences();
+            // rootView가 아닌 container
+            String str = mPreferences.getString("TT","");
+            Snackbar.make(container.findViewById(R.id.relative1),"Snack",Snackbar.LENGTH_SHORT).show();
+
         }
 
         return rootView;
+    }
+
+    private void getPreferences() {
+        dataList.add(new CardItem(mPreferences.getString("UserInfo","0"),"123"));
     }
 
     @Override
