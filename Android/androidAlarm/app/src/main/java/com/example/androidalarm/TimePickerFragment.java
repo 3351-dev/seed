@@ -26,20 +26,6 @@ import java.util.Calendar;
 public class TimePickerFragment extends DialogFragment implements TimePickerDialog.OnTimeSetListener{
 
     private AlarmManager mAlarmManager;
-/*
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-        View view = inflater.inflate(R.layout.item_card,container,false);
-        TextView title = (TextView) view.findViewById(R.id.title_text);
-
-        title.setText("123");
-
-        return view;
-    }
-
- */
-
-
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -59,11 +45,10 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
 
     @Override
     public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
+        /*----------------------------------------------------------------------*/
         LayoutInflater inflater = getLayoutInflater();
         View v1 = inflater.inflate(R.layout.item_card,null);
-        TextView title = (TextView) v1.findViewById(R.id.title_text);
 
-        Log.d("Before",""+title.getText());
         // 설정된 시간
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
@@ -77,7 +62,6 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
 
         mAlarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), operation);
         /*----------------------------------------------------------------------*/
-
         /*title.setText(hourOfDay + " : " +minute);
         Log.d("After",""+title.getText());*/
 
@@ -91,6 +75,16 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
         fragment_view_1.setArguments(bundle);
         transaction.replace(R.id.container, fragment_view_1);
         transaction.commit();
+        /*----------------------------------------------------------------------*/
+        if(getArguments()!=null){
+            int test1, test2;
+            test1 = getArguments().getInt("switch");
+            test2 = getArguments().getInt("Count");
+            Log.d("TP getArguments","test1 : "+test1+" test2 : "+test2);
+        }else{
+            Log.d("TP getArguments","nothing");
+        }
+        /*----------------------------------------------------------------------*/
     }
 
 }

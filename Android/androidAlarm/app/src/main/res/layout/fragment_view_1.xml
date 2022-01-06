@@ -5,8 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
-
     >
 
     <androidx.recyclerview.widget.RecyclerView
@@ -24,7 +22,17 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_margin="15dp"
-        android:backgroundTint="#9500ff"
+        android:backgroundTint="#11f00a"
+        />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:backgroundTint="#f51d48"
+        android:layout_toLeftOf="@+id/fab"
+        android:layout_alignParentBottom="true"
         />
 
 

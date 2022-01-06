@@ -17,6 +17,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -34,6 +35,7 @@ public class fragment_view_1 extends Fragment implements recyclerAdapter.Recycle
     private FragmentActivity myContext;
     private SharedPreferences mPreferences;
     private FloatingActionButton fab;
+    private FloatingActionButton fab2;  //test button
     private RelativeLayout rl1;
 
     @Nullable
@@ -43,34 +45,59 @@ public class fragment_view_1 extends Fragment implements recyclerAdapter.Recycle
                              @NonNull Bundle savedInstanceState){
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_view_1, container, false);
 
+        mAdapter = new recyclerAdapter(dataList,getContext());
+        mAdapter.setOnClickListener(this);
+
         rl1 = rootView.findViewById(R.id.relative1);
         fab = (FloatingActionButton) rootView.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int pos = 0;
-                Log.d("fabClickTest", "fab click");
-                for(int i=0;i<dataList.size();i++){
-                    pos++;
+                int pos = mAdapter.getItemCount()+1;
+                Log.d("fabClickTest", "pos:"+pos);
+                // Todo
+                for(int i=0;i<10;i++){
+                    String count = mPreferences.getString(String.valueOf(i),"");
                 }
                 onTitleClicked(pos);
             }
         });
 
+        fab2 = rootView.findViewById(R.id.fab2);
+        fab2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mPreferences = getActivity().getSharedPreferences("alarm", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor= mPreferences.edit();
+                int amountCount = mAdapter.getItemCount();
+                Log.d("getItemCount",">>>"+mAdapter.getItemCount());
+                for(int i=0;i<10;i++){
+                    int j=0;
+                    editor.remove(String.valueOf(i));
+                    if(i<amountCount) {
+                        mAdapter.removeItem(j);
+                        Log.d("removeItem","ok");
+                        j++;
+                    }
+                }
+                editor.apply();
+
+            }
+        });
+
         recyclerView = rootView.findViewById(R.id.connect_recyclerview);
         // RecyclerView Adapter
-        recyclerAdapter recyclerAdapter = new recyclerAdapter(dataList,getContext());
+//        recyclerAdapter recyclerAdapter = new recyclerAdapter(dataList,getContext());
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setAdapter(recyclerAdapter);
+//        recyclerView.setAdapter(recyclerAdapter);
 
-        mAdapter = new recyclerAdapter(dataList,getContext());
-        mAdapter.setOnClickListener(this);
+
         recyclerView.setAdapter(mAdapter);
 
+        // Preferences Setting
 //        mPreferences = PreferenceManager.getDefaultSharedPreferences(myContext);
-        mPreferences = getActivity().getSharedPreferences("UserInfo", Context.MODE_PRIVATE);
+        mPreferences = getActivity().getSharedPreferences("alarm", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = mPreferences.edit();
-
 
         // Bundle
         if(getArguments()!= null){
@@ -78,25 +105,30 @@ public class fragment_view_1 extends Fragment implements recyclerAdapter.Recycle
             String hour, minute;
             hour = getArguments().getString("hour");
             minute = getArguments().getString("minute");
-            Log.d("Fragment_view_1","bundle : "+hour);
-            for(int i=0;i<dataList.size();i++){
-                pos++;
-            }
-            dataList.add(new CardItem(hour+":"+minute,""+pos));
-            editor.putString("TT", "value");
-            editor.commit();
-            getPreferences();
+
+
+            pos = mAdapter.getItemCount();      //(error) pos = 0
+            Log.d("Bundle getItemCount",""+pos);
+
+            String value = hour+":"+minute;
+            editor.putString(String.valueOf(pos), value);
+            editor.apply();
             // rootView가 아닌 container
-            String str = mPreferences.getString("TT","");
-            Snackbar.make(container.findViewById(R.id.relative1),"Snack",Snackbar.LENGTH_SHORT).show();
+//            Snackbar.make(container.findViewById(R.id.relative1),str,Snackbar.LENGTH_SHORT).show();
 
         }
+        getPreferences();
 
         return rootView;
     }
 
     private void getPreferences() {
-        dataList.add(new CardItem(mPreferences.getString("UserInfo","0"),"123"));
+        for(int i=0;i<10;i++){
+            String data = mPreferences.getString(String.valueOf(i),"");
+            if(data != ""){
+                dataList.add(new CardItem(data,String.valueOf(i)));
+            }
+        }
     }
 
     @Override
@@ -112,10 +144,10 @@ public class fragment_view_1 extends Fragment implements recyclerAdapter.Recycle
 
         // 표시할 데이터
         dataList = new ArrayList<>();
-        dataList.add(new CardItem("First","Android Boy"));
-        dataList.add(new CardItem("Second","one\nTwo"));
-        dataList.add(new CardItem("Third","1\n2\n3"));
 
+        /*dataList.add(new CardItem("0","0"));
+        dataList.add(new CardItem("1","1"));
+        dataList.add(new CardItem("2","2"));*/
     }
 
     public void onItemClicked(int position){
@@ -131,17 +163,31 @@ public class fragment_view_1 extends Fragment implements recyclerAdapter.Recycle
     public void onDeleteButtonClicked(int position) {
         Log.d(" ","delete : " + position);
         mAdapter.removeItem(position);
+        mPreferences = getActivity().getSharedPreferences("alarm", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor= mPreferences.edit();
+        editor.remove(String.valueOf(position));
+        editor.apply();
+        Log.d("Preferences Remove",""+position);
     }
 
     @Override
     public void onTitleClicked(int position) {
-        Log.d("fragment","title pos : "+position);
+//        Log.d("fragment","title pos : "+position);
+        /*----------------------------------------------------------------------*/
+        // Bundle
+        int ItemCount = mAdapter.getItemCount();
+        Bundle bundle = new Bundle();
+        bundle.putInt("switch",position);
+        bundle.putInt("Count",ItemCount);
+        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+        TimePickerFragment tp = new TimePickerFragment();
+        tp.setArguments(bundle);
+        transaction.commit();
+        /*----------------------------------------------------------------------*/
+
         FragmentManager fragmentManager = myContext.getSupportFragmentManager();
         TimePickerFragment timePickerFragment = new TimePickerFragment();
-        // setTargetFragment use
-//        timePickerFragment.setTargetFragment(this, 0);
         timePickerFragment.show(fragmentManager, " timePicker");
-
     }
 
 
