@@ -46,9 +46,7 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
     @Override
     public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
         /*----------------------------------------------------------------------*/
-        LayoutInflater inflater = getLayoutInflater();
-        View v1 = inflater.inflate(R.layout.item_card,null);
-
+        int pos=0, ItemCount=0;
         // 설정된 시간
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
@@ -57,34 +55,40 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
 
         Toast.makeText(this.getContext(),""+hourOfDay+" "+minute,Toast.LENGTH_SHORT).show();
 
-        Intent intent = new Intent(getContext(), recyclerAdapter.class);
-        PendingIntent operation = PendingIntent.getActivity(getContext(), 0, intent, 0);
+//        PendingIntent operation = PendingIntent.getActivity(getContext(), 0, intent, 0);
+        Intent intent = new Intent(getContext(), alarmReceiver.class);
+        PendingIntent operation = PendingIntent.getBroadcast(getContext(), 0, intent, 0);
 
         mAlarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), operation);
         /*----------------------------------------------------------------------*/
-        /*title.setText(hourOfDay + " : " +minute);
+        /*title.setText(hourOfDay + " : " +minute);x
         Log.d("After",""+title.getText());*/
 
-        // Bundle use
+        /*----------------------------------------------------------------------*/
+        // Bundle Get
+        if(getArguments()!=null){
+
+            pos = getArguments().getInt("pos");
+            ItemCount = getArguments().getInt("ItemCount");
+            Log.d("TP getArguments","pos : "+pos+" ItemCount : "+ItemCount);
+        }else{
+            Log.d("TP getArguments","nothing");
+        }
+        /*----------------------------------------------------------------------*/
+        // Bundle Send
         Bundle bundle = new Bundle();
         bundle.putString("hour", String.valueOf(hourOfDay));
         bundle.putString("minute", String.valueOf(minute));
+        bundle.putString("pos",String.valueOf(pos));
         Log.d("Bundle Test","bundle : "+bundle);
         FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
         fragment_view_1 fragment_view_1 = new fragment_view_1();
         fragment_view_1.setArguments(bundle);
         transaction.replace(R.id.container, fragment_view_1);
         transaction.commit();
-        /*----------------------------------------------------------------------*/
-        if(getArguments()!=null){
-            int test1, test2;
-            test1 = getArguments().getInt("switch");
-            test2 = getArguments().getInt("Count");
-            Log.d("TP getArguments","test1 : "+test1+" test2 : "+test2);
-        }else{
-            Log.d("TP getArguments","nothing");
-        }
-        /*----------------------------------------------------------------------*/
+
     }
+
+
 
 }

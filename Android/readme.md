@@ -62,7 +62,7 @@
 ## 0105
 
 ### Fragment ~ Fragment 값 전달   
-* Intent : 데이터를 전달   
+* Intent : 데이터를 전달   	
 * Bundle : 데이터를 저장   
 * Bundle을 이용해서 값 반환   
 * https://fjdkslvn.tistory.com/14   
@@ -77,4 +77,13 @@ editor.putString("key",value);
 editor.commit()   
 getPreferences();   
 
+## 0106
 
+Bundle을 이용하여 Fragment_view_1과 TimePickerFragment 사이 값 전달    
+* AlarmManager   
+	Intent intent = new Intent(getContext(), alaramReceiver.class);   
+	PendingIntent operation = PendingIntent.getBroadcast(getContext(),0,intent,0);   
+	mAlarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), operation);   
+	
+* 정각에 알리게끔 수정할것
+	

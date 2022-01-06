@@ -78,12 +78,12 @@ public class recyclerAdapter extends RecyclerView.Adapter<recyclerAdapter.ViewHo
                 if(expandable_view.getVisibility() == View.GONE){
                     expandable_view.setVisibility(View.VISIBLE);
                     contents_view.setVisibility(View.GONE);
-                    Log.d("3351", "unFold " + pos);
+//                    Log.d("3351", "unFold " + pos);
 //                        Log.d("3351", "repeat btn "+repeat_btn_view.getVisibility());
                 }else{
                     expandable_view.setVisibility(View.GONE);
                     contents_view.setVisibility(View.VISIBLE);
-                    Log.d("3351", "Fold "+pos);
+//                    Log.d("3351", "Fold "+pos);
 //                        Log.d("3351", "repeat btn "+repeat_btn_view.getVisibility());
 
                 }
@@ -145,12 +145,10 @@ public class recyclerAdapter extends RecyclerView.Adapter<recyclerAdapter.ViewHo
             holder.title.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Log.d("adapter","setText : "+holder.title.getText());
+//                    Log.d("adapter","setText : "+holder.title.getText());
                     mListener.onTitleClicked(pos);
                 }
             });
-
-
 
         }
 

@@ -37,6 +37,7 @@ public class fragment_view_1 extends Fragment implements recyclerAdapter.Recycle
     private FloatingActionButton fab;
     private FloatingActionButton fab2;  //test button
     private RelativeLayout rl1;
+    int HoldPosition;
 
     @Nullable
     @Override
@@ -53,13 +54,17 @@ public class fragment_view_1 extends Fragment implements recyclerAdapter.Recycle
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int pos = mAdapter.getItemCount()+1;
+                int pos = mAdapter.getItemCount();
+                String temp = "10:00";
                 Log.d("fabClickTest", "pos:"+pos);
                 // Todo
-                for(int i=0;i<10;i++){
-                    String count = mPreferences.getString(String.valueOf(i),"");
-                }
-                onTitleClicked(pos);
+                mAdapter.addItem(pos, new CardItem(temp,"contents"));
+                mPreferences = getActivity().getSharedPreferences("alarm", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = mPreferences.edit();
+                editor.putString(String.valueOf(pos), temp);
+                editor.apply();
+
+//                onTitleClicked(pos);
             }
         });
 
@@ -81,7 +86,6 @@ public class fragment_view_1 extends Fragment implements recyclerAdapter.Recycle
                     }
                 }
                 editor.apply();
-
             }
         });
 
@@ -101,14 +105,14 @@ public class fragment_view_1 extends Fragment implements recyclerAdapter.Recycle
 
         // Bundle
         if(getArguments()!= null){
-            int pos=0;
+            String pos;
             String hour, minute;
             hour = getArguments().getString("hour");
             minute = getArguments().getString("minute");
+            pos = getArguments().getString("pos");
 
-
-            pos = mAdapter.getItemCount();      //(error) pos = 0
-            Log.d("Bundle getItemCount",""+pos);
+//            pos = mAdapter.getItemCount();      //(error) pos = 0
+//            Log.d("Bundle getItemCount",""+pos);
 
             String value = hour+":"+minute;
             editor.putString(String.valueOf(pos), value);
@@ -177,18 +181,15 @@ public class fragment_view_1 extends Fragment implements recyclerAdapter.Recycle
         // Bundle
         int ItemCount = mAdapter.getItemCount();
         Bundle bundle = new Bundle();
-        bundle.putInt("switch",position);
-        bundle.putInt("Count",ItemCount);
-        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-        TimePickerFragment tp = new TimePickerFragment();
-        tp.setArguments(bundle);
-        transaction.commit();
+        bundle.putInt("pos",position);
+        bundle.putInt("ItemCount",ItemCount);
+
         /*----------------------------------------------------------------------*/
 
         FragmentManager fragmentManager = myContext.getSupportFragmentManager();
         TimePickerFragment timePickerFragment = new TimePickerFragment();
         timePickerFragment.show(fragmentManager, " timePicker");
+        // Bundle
+        timePickerFragment.setArguments(bundle);
     }
-
-
 }
