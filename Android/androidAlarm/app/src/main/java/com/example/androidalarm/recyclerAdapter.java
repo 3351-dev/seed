@@ -1,8 +1,10 @@
 package com.example.androidalarm;
 
+import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -32,6 +34,7 @@ public class recyclerAdapter extends RecyclerView.Adapter<recyclerAdapter.ViewHo
     LinearLayout expandable_view;
     TextView contents_view;
     CheckBox repeat_checkbox;
+    private SharedPreferences mPreferences;
 
     public recyclerAdapter(List<CardItem> DataList, Context context) {
         this.mDataList = DataList;
@@ -130,7 +133,14 @@ public class recyclerAdapter extends RecyclerView.Adapter<recyclerAdapter.ViewHo
                 @Override
                 public void onClick(View view) {
                     if(holder.OnOff.isChecked()){
-                        Log.d("OnOff"," ON "+pos);
+                        String str;
+                        mPreferences = mContext.getSharedPreferences("alarm",Context.MODE_PRIVATE);
+                        str = mPreferences.getString(String.valueOf(0),"");
+
+                        String[] time = str.split(":");
+                        /*mAlarmManager.setExact(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),operation);*/
+
+                        Log.d("OnOff"," ON "+str+" "+time[0] + " "+time[1]);
                         holder.title.setTextColor(Color.BLUE);
                         holder.contents.setTextColor(Color.BLUE);
                     }else{
@@ -179,8 +189,6 @@ public class recyclerAdapter extends RecyclerView.Adapter<recyclerAdapter.ViewHo
         ToggleButton sun;
         TextView label_view;
         TextView contents_view;
-
-
 
 
         public ViewHolder(View itemView) {

@@ -37,7 +37,6 @@ public class fragment_view_1 extends Fragment implements recyclerAdapter.Recycle
     private FloatingActionButton fab;
     private FloatingActionButton fab2;  //test button
     private RelativeLayout rl1;
-    int HoldPosition;
 
     @Nullable
     @Override

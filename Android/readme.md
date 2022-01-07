@@ -81,9 +81,11 @@ getPreferences();
 
 Bundle을 이용하여 Fragment_view_1과 TimePickerFragment 사이 값 전달    
 * AlarmManager   
-	Intent intent = new Intent(getContext(), alaramReceiver.class);   
-	PendingIntent operation = PendingIntent.getBroadcast(getContext(),0,intent,0);   
-	mAlarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), operation);   
+```
+Intent intent = new Intent(getContext(), alaramReceiver.class);   
+PendingIntent operation = PendingIntent.getBroadcast(getContext(),0,intent,0);
+mAlarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), operation);
+```
 	
 * 정각에 알리게끔 수정할것   
 
@@ -95,17 +97,17 @@ setExact를 통해 정각에 시간을 알리도록 설정
    
 * 중간에 있는 값을 삭제하고 List와 Preferences가 일치하지않는 문제   
 ```
-	for(After){
-		if(mPreferences(i)=""){
-			for(before){
-				if(mPreferences(j)=""){
-					mPreferences.put(j+1);   
-					mPreferences.remove(j+1);   
-					mPreferences.apply();
-				}
+for(After){
+	if(mPreferences(i)=""){
+		for(before){
+			if(mPreferences(j)=""){
+				mPreferences.put(j+1);   
+				mPreferences.remove(j+1);   
+				mPreferences.apply();
 			}
 		}
 	}
+}
 ```
    
-*
+* 
