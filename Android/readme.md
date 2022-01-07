@@ -94,12 +94,18 @@ setExact를 통해 정각에 시간을 알리도록 설정
 + https://greedy0110.tistory.com/69   
    
 * 중간에 있는 값을 삭제하고 List와 Preferences가 일치하지않는 문제   
-	for(After)   
-		if(mPreferences(i)="")   
-			for(before)   
-				if(mPreferences(j)="")   
+```
+	for(After){
+		if(mPreferences(i)=""){
+			for(before){
+				if(mPreferences(j)=""){
 					mPreferences.put(j+1);   
 					mPreferences.remove(j+1);   
-					mPreferences.apply();   
+					mPreferences.apply();
+				}
+			}
+		}
+	}
+```
    
 *
