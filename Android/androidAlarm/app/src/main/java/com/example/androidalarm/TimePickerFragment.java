@@ -17,6 +17,8 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -27,6 +29,7 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
 
     private AlarmManager mAlarmManager;
 
+    @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
@@ -51,6 +54,7 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
         calendar.set(Calendar.MINUTE,minute);
+        calendar.set(Calendar.SECOND,0);
 
 
         Toast.makeText(this.getContext(),""+hourOfDay+" "+minute,Toast.LENGTH_SHORT).show();
@@ -59,9 +63,11 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
         Intent intent = new Intent(getContext(), alarmReceiver.class);
         PendingIntent operation = PendingIntent.getBroadcast(getContext(), 0, intent, 0);
 
-        mAlarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), operation);
+        /*mAlarmManager.setExact(AlarmManager.RTC_WAKEUP,
+                calendar.getTimeInMillis(),
+                operation);*/
         /*----------------------------------------------------------------------*/
-        /*title.setText(hourOfDay + " : " +minute);x
+        /*title.setText(hourOfDay + " : " +minute);
         Log.d("After",""+title.getText());*/
 
         /*----------------------------------------------------------------------*/

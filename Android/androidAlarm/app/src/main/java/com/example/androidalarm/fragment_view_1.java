@@ -75,13 +75,12 @@ public class fragment_view_1 extends Fragment implements recyclerAdapter.Recycle
                 mPreferences = getActivity().getSharedPreferences("alarm", Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor= mPreferences.edit();
                 int amountCount = mAdapter.getItemCount();
-                Log.d("getItemCount",">>>"+mAdapter.getItemCount());
+                Log.d("getItemCount",">>> "+mAdapter.getItemCount());
                 for(int i=0;i<10;i++){
                     int j=0;
                     editor.remove(String.valueOf(i));
                     if(i<amountCount) {
                         mAdapter.removeItem(j);
-                        Log.d("removeItem","ok");
                         j++;
                     }
                 }
@@ -102,6 +101,8 @@ public class fragment_view_1 extends Fragment implements recyclerAdapter.Recycle
 //        mPreferences = PreferenceManager.getDefaultSharedPreferences(myContext);
         mPreferences = getActivity().getSharedPreferences("alarm", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = mPreferences.edit();
+
+
 
         // Bundle
         if(getArguments()!= null){
@@ -130,13 +131,13 @@ public class fragment_view_1 extends Fragment implements recyclerAdapter.Recycle
         for(int i=0;i<10;i++){
             String data = mPreferences.getString(String.valueOf(i),"");
             if(data != ""){
-                dataList.add(new CardItem(data,String.valueOf(i)));
+                dataList.add(new CardItem(data,mPreferences.getString(String.valueOf(i),"")));
             }
         }
     }
 
     @Override
-    public void onAttach(Activity activity){
+    public void onAttach(@NonNull Activity activity){
         myContext = (FragmentActivity) activity;
         super.onAttach(activity);
 
@@ -165,13 +166,29 @@ public class fragment_view_1 extends Fragment implements recyclerAdapter.Recycle
     }
 
     public void onDeleteButtonClicked(int position) {
-        Log.d(" ","delete : " + position);
+        int beforeCount, afterCount;
+        beforeCount = mAdapter.getItemCount();
+        Log.d("Delete","\t delete : " + position + "\tPreferences : "+mPreferences.getString(String.valueOf(position),""));
         mAdapter.removeItem(position);
         mPreferences = getActivity().getSharedPreferences("alarm", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor= mPreferences.edit();
         editor.remove(String.valueOf(position));
         editor.apply();
+        afterCount = mAdapter.getItemCount();
+
+        for(int i=0;i<afterCount;i++){
+            if(mPreferences.getString(String.valueOf(i),"")==""){
+                for(int j=0;j<beforeCount;j++){
+                    if(mPreferences.getString(String.valueOf(j),"")==""){
+                        editor.putString(String.valueOf(j),mPreferences.getString(String.valueOf(j+1),""));
+                        editor.remove(String.valueOf(j+1));
+                        editor.apply();
+                    }
+                }
+            }
+        }
         Log.d("Preferences Remove",""+position);
+//        getString(String.valueOf(i),"");
     }
 
     @Override
