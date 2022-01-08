@@ -84,7 +84,7 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
         // Bundle Send
         Bundle bundle = new Bundle();
         bundle.putString("hour", String.valueOf(hourOfDay));
-        bundle.putString("minute", String.valueOf(minute));
+        bundle.putString("minute", String.format("%02d",minute));
         bundle.putString("pos",String.valueOf(pos));
         Log.d("Bundle Test","bundle : "+bundle);
         FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();

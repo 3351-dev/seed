@@ -110,4 +110,11 @@ for(After){
 }
 ```
    
-* 
+* 알람매니저를 통한 알람 설정   
+PendingIntent의 FLAG 옵션을 통한 제어   
+1. FLAG_UPDATE_CURRENT : PendingIntent가 이미 존재할 경우, Extra Data를 모두 교체   
+2. FLAG_CANCEL_CURRENT : PendingIntent가 이미 존재할 경우, 기존 PendingIntent를 cancel하고 다시생성   
+PendingIntent ID를 설정하여 알람식별 
+
+* String.format을 통한 두자리 숫자 표시
+기존의 경우 01분일때 1분으로 표기되었지만 수정후 01분으로 잘 표기됨을 확인
