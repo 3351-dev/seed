@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -162,6 +163,9 @@ public class recyclerAdapter extends RecyclerView.Adapter<recyclerAdapter.ViewHo
                         mAlarmManager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
 
                         Intent intent = new Intent(mContext, alarmReceiver.class);
+                        // alarmReceiver 값 전달
+                        intent.putExtra("pos",pos);
+
                         PendingIntent operation = PendingIntent.getBroadcast(mContext,
                                 pos,
                                 intent,

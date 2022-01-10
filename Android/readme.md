@@ -125,5 +125,11 @@ PendingIntent ID를 설정하여 알람식별
 * recyclerAdapter.java   
 Preferences에 value + "onOff" 값을 만들어 on/off 상태 확인 후 켜짐꺼짐 생성   
 contents 또한 value(pos)+"contents"로 만들어 값 저장 및 출력   
-	editor.apply();   
+editor.apply();   
+
+* alarmReceiver.java   
+Activity에서 BroadcastReceiver로 데이터 전달   
+[activity] intent.putExtra("id",id);   
+[receiver] string id = intent.getStringExtra("id");   
+https://andaeng.tistory.com/27
 
