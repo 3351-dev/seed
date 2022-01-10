@@ -141,3 +141,4 @@ NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "de
 	.setDefualt(Notification.DEFAULT_VIBRATE);		// 진동 or 사운드
 	.setPriority(NotificationCompat.PRIORITY_MAX);	// 우선순위
 ```
+
