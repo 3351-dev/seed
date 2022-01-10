@@ -57,8 +57,6 @@ public class recyclerAdapter extends RecyclerView.Adapter<recyclerAdapter.ViewHo
         void onTitleClicked(int pos);
     }
 
-
-
     @NonNull
     @Override
     // 생성
@@ -75,6 +73,16 @@ public class recyclerAdapter extends RecyclerView.Adapter<recyclerAdapter.ViewHo
         CardItem item = mDataList.get(position);
         holder.title.setText(item.getTitle());
         holder.contents.setText(item.getContents());
+
+        mPreferences = mContext.getSharedPreferences("alarm",Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = mPreferences.edit();
+
+        if(mPreferences.getString(String.valueOf(position)+"onOff","").equals("on")){
+            holder.OnOff.setChecked(true);
+            holder.title.setTextColor(Color.BLUE);
+            holder.contents.setTextColor(Color.BLUE);
+        }
+
 
         if(mListener != null){
             final int pos = position;
@@ -117,9 +125,8 @@ public class recyclerAdapter extends RecyclerView.Adapter<recyclerAdapter.ViewHo
                 @Override
                 public void onClick(View view) {
                     repeat_checkbox = view.findViewById(R.id.repeat_checkbox);
-//                    repeat_btn_view = view.findViewById(R.id.repeat_btn_view);    // Question 왜 이렇게 받으면 안되나요
+//                    repeat_btn_view = view.findViewById(R.id.repeat_btn_view);    // ?
 //                    mListener.onRepeatCheckboxClicked(pos);
-
 
                     if(repeat_checkbox.isChecked()){
                         Log.d("3351","Checked " + pos );
@@ -137,10 +144,13 @@ public class recyclerAdapter extends RecyclerView.Adapter<recyclerAdapter.ViewHo
                 @Override
                 public void onClick(View view) {
                     String str;
+
                     mPreferences = mContext.getSharedPreferences("alarm",Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = mPreferences.edit();
                     str = mPreferences.getString(String.valueOf(pos),"");
 
                     String[] time = str.split(":");
+
                     // AlarmManager
                     Calendar calendar = Calendar.getInstance();
                     calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(time[0]));
@@ -159,6 +169,9 @@ public class recyclerAdapter extends RecyclerView.Adapter<recyclerAdapter.ViewHo
 
                         mAlarmManager.setExact(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),operation);
 
+                        editor.putString(String.valueOf(pos)+"onOff","on");
+                        editor.apply();
+
                         Log.d("OnOff"," ON "+str+" "+time[0] + " "+time[1]);
                         holder.title.setTextColor(Color.BLUE);
                         holder.contents.setTextColor(Color.BLUE);
@@ -174,6 +187,9 @@ public class recyclerAdapter extends RecyclerView.Adapter<recyclerAdapter.ViewHo
                             operation.cancel();
                         }
 
+                        editor.putString(String.valueOf(pos)+"onOff","off");
+                        editor.apply();
+
                         Log.d("OnOff"," OFF "+pos);
                         holder.title.setTextColor(Color.BLACK);
                         holder.contents.setTextColor(Color.BLACK);
@@ -187,6 +203,34 @@ public class recyclerAdapter extends RecyclerView.Adapter<recyclerAdapter.ViewHo
                 public void onClick(View view) {
 //                    Log.d("adapter","setText : "+holder.title.getText());
                     mListener.onTitleClicked(pos);
+                }
+            });
+
+            holder.label_view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    AlertDialog.Builder alert = new AlertDialog.Builder(view.getContext());
+                    alert.setTitle("Label");
+
+                    final EditText contents = new EditText(view.getContext());
+                    alert.setView(contents);
+
+                    alert.setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            String userContents = contents.getText().toString();
+                            holder.contents.setText(userContents);
+                            editor.putString(String.valueOf(pos)+"contents",userContents);
+                            editor.apply();
+                            Log.d("AlertDialog"," "
+                                    +userContents+" "
+                                    +pos+" "
+                                    +mPreferences.getString(String.valueOf(pos)+"contents","")
+                            );
+                        }
+                    });
+                    alert.show();
+
                 }
             });
 
@@ -220,6 +264,8 @@ public class recyclerAdapter extends RecyclerView.Adapter<recyclerAdapter.ViewHo
         TextView label_view;
         TextView contents_view;
 
+//        SharedPreferences mPreferences;
+//        SharedPreferences.Editor editor = mPreferences.edit();
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -396,26 +442,27 @@ public class recyclerAdapter extends RecyclerView.Adapter<recyclerAdapter.ViewHo
                 }
 
             });
-            label_view.setOnClickListener(new View.OnClickListener() {
+            /*label_view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     AlertDialog.Builder alert = new AlertDialog.Builder(view.getContext());
                     alert.setTitle("Label");
 
-                    final EditText usercontents = new EditText(view.getContext());
-                    alert.setView(usercontents);
+                    final EditText contents = new EditText(view.getContext());
+                    alert.setView(contents);
 
                     alert.setPositiveButton("ok", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            String userContents = usercontents.getText().toString();
+                            String userContents = contents.getText().toString();
                             contents.setText(userContents);
+                            editor.putString("","");
                             Log.d("AlertDialog"," "+userContents);
                         }
                     });
                     alert.show();
                 }
-            });
+            });*/
 
 
         }

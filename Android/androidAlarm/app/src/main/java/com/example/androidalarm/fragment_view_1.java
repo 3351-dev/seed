@@ -36,7 +36,6 @@ public class fragment_view_1 extends Fragment implements recyclerAdapter.Recycle
     private SharedPreferences mPreferences;
     private FloatingActionButton fab;
     private FloatingActionButton fab2;  //test button
-    private RelativeLayout rl1;
 
     @Nullable
     @Override
@@ -48,7 +47,9 @@ public class fragment_view_1 extends Fragment implements recyclerAdapter.Recycle
         mAdapter = new recyclerAdapter(dataList,getContext());
         mAdapter.setOnClickListener(this);
 
-        rl1 = rootView.findViewById(R.id.relative1);
+        mPreferences = getActivity().getSharedPreferences("alarm", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = mPreferences.edit();
+
         fab = (FloatingActionButton) rootView.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,9 +59,9 @@ public class fragment_view_1 extends Fragment implements recyclerAdapter.Recycle
                 Log.d("fabClickTest", "pos:"+pos);
                 // Todo
                 mAdapter.addItem(pos, new CardItem(temp,"contents"));
-                mPreferences = getActivity().getSharedPreferences("alarm", Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = mPreferences.edit();
+
                 editor.putString(String.valueOf(pos), temp);
+                editor.putString(String.valueOf(pos)+"contents","contents");
                 editor.apply();
 
 //                onTitleClicked(pos);
@@ -71,13 +72,13 @@ public class fragment_view_1 extends Fragment implements recyclerAdapter.Recycle
         fab2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mPreferences = getActivity().getSharedPreferences("alarm", Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor= mPreferences.edit();
+
                 int amountCount = mAdapter.getItemCount();
                 Log.d("getItemCount",">>> "+mAdapter.getItemCount());
                 for(int i=0;i<10;i++){
                     int j=0;
                     editor.remove(String.valueOf(i));
+                    editor.remove(String.valueOf(i)+"onOff");
                     if(i<amountCount) {
                         mAdapter.removeItem(j);
                         j++;
@@ -98,10 +99,7 @@ public class fragment_view_1 extends Fragment implements recyclerAdapter.Recycle
 
         // Preferences Setting
 //        mPreferences = PreferenceManager.getDefaultSharedPreferences(myContext);
-        mPreferences = getActivity().getSharedPreferences("alarm", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = mPreferences.edit();
-
-
+//        mPreferences = getActivity().getSharedPreferences("alarm", Context.MODE_PRIVATE);
 
         // Bundle
         if(getArguments()!= null){
@@ -121,6 +119,7 @@ public class fragment_view_1 extends Fragment implements recyclerAdapter.Recycle
 //            Snackbar.make(container.findViewById(R.id.relative1),str,Snackbar.LENGTH_SHORT).show();
 
         }
+
         getPreferences();
 
         return rootView;
@@ -130,7 +129,7 @@ public class fragment_view_1 extends Fragment implements recyclerAdapter.Recycle
         for(int i=0;i<10;i++){
             String data = mPreferences.getString(String.valueOf(i),"");
             if(data != ""){
-                dataList.add(new CardItem(data,mPreferences.getString(String.valueOf(i),"")));
+                dataList.add(new CardItem(data,mPreferences.getString(String.valueOf(i)+"contents","")));
             }
         }
     }
@@ -152,6 +151,7 @@ public class fragment_view_1 extends Fragment implements recyclerAdapter.Recycle
         /*dataList.add(new CardItem("0","0"));
         dataList.add(new CardItem("1","1"));
         dataList.add(new CardItem("2","2"));*/
+//        Log.d("onCreate","ItemCount : "+mAdapter.getItemCount());
     }
 
     public void onItemClicked(int position){
@@ -172,6 +172,7 @@ public class fragment_view_1 extends Fragment implements recyclerAdapter.Recycle
         mPreferences = getActivity().getSharedPreferences("alarm", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor= mPreferences.edit();
         editor.remove(String.valueOf(position));
+        editor.remove(String.valueOf(position)+"onOff");
         editor.apply();
         afterCount = mAdapter.getItemCount();
 
@@ -192,6 +193,10 @@ public class fragment_view_1 extends Fragment implements recyclerAdapter.Recycle
 
     @Override
     public void onTitleClicked(int position) {
+        SharedPreferences.Editor editor = mPreferences.edit();
+        editor.putString(String.valueOf(position)+"onOff","");
+        editor.apply();
+
 //        Log.d("fragment","title pos : "+position);
         /*----------------------------------------------------------------------*/
         // Bundle

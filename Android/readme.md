@@ -117,4 +117,13 @@ PendingIntent의 FLAG 옵션을 통한 제어
 PendingIntent ID를 설정하여 알람식별 
 
 * String.format을 통한 두자리 숫자 표시
-기존의 경우 01분일때 1분으로 표기되었지만 수정후 01분으로 잘 표기됨을 확인
+기존의 경우 01분일때 1분으로 표기되었지만 수정후 01분으로 잘 표기됨을 확인   
+
+
+## 0110
+
+* recyclerAdapter.java   
+Preferences에 value + "onOff" 값을 만들어 on/off 상태 확인 후 켜짐꺼짐 생성   
+contents 또한 value(pos)+"contents"로 만들어 값 저장 및 출력   
+	editor.apply();   
+

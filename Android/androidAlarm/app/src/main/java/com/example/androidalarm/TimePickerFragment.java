@@ -1,26 +1,20 @@
 package com.example.androidalarm;
 
-import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.Dialog;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import java.util.Calendar;
@@ -59,9 +53,11 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
 
         Toast.makeText(this.getContext(),""+hourOfDay+" "+minute,Toast.LENGTH_SHORT).show();
 
+        // getActivity 아닌 getBroadcast
 //        PendingIntent operation = PendingIntent.getActivity(getContext(), 0, intent, 0);
-        Intent intent = new Intent(getContext(), alarmReceiver.class);
-        PendingIntent operation = PendingIntent.getBroadcast(getContext(), 0, intent, 0);
+
+//        Intent intent = new Intent(getContext(), alarmReceiver.class);
+//        PendingIntent operation = PendingIntent.getBroadcast(getContext(), 0, intent, 0);
 
         /*mAlarmManager.setExact(AlarmManager.RTC_WAKEUP,
                 calendar.getTimeInMillis(),
@@ -83,7 +79,8 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
         /*----------------------------------------------------------------------*/
         // Bundle Send
         Bundle bundle = new Bundle();
-        bundle.putString("hour", String.valueOf(hourOfDay));
+//        bundle.putString("hour", String.valueOf(hourOfDay));
+        bundle.putString("hour", String.format("%02d",hourOfDay));
         bundle.putString("minute", String.format("%02d",minute));
         bundle.putString("pos",String.valueOf(pos));
         Log.d("Bundle Test","bundle : "+bundle);
@@ -94,7 +91,4 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
         transaction.commit();
 
     }
-
-
-
 }
