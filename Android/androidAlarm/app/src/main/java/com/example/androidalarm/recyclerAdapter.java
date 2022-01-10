@@ -86,7 +86,7 @@ public class recyclerAdapter extends RecyclerView.Adapter<recyclerAdapter.ViewHo
 
 
         if(mListener != null){
-            final int pos = position;
+            int pos = position;
             holder.itemView.setOnClickListener(view -> {
                 expandable_view = view.findViewById(R.id.expandable_view);
                 contents_view = view.findViewById(R.id.contents_text);

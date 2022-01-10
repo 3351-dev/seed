@@ -131,5 +131,6 @@ editor.apply();
 Activity에서 BroadcastReceiver로 데이터 전달   
 [activity] intent.putExtra("id",id);   
 [receiver] string id = intent.getStringExtra("id");   
-https://andaeng.tistory.com/27
+https://andaeng.tistory.com/27   
 
+* onOff와 contents를 만들었기에 delete키에 추가

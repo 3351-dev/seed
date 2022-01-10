@@ -79,12 +79,14 @@ public class fragment_view_1 extends Fragment implements recyclerAdapter.Recycle
                     int j=0;
                     editor.remove(String.valueOf(i));
                     editor.remove(String.valueOf(i)+"onOff");
+                    editor.remove(String.valueOf(i)+"contents");
+                    editor.apply();
                     if(i<amountCount) {
                         mAdapter.removeItem(j);
                         j++;
                     }
                 }
-                editor.apply();
+//                editor.apply();
             }
         });
 
@@ -167,12 +169,13 @@ public class fragment_view_1 extends Fragment implements recyclerAdapter.Recycle
     public void onDeleteButtonClicked(int position) {
         int beforeCount, afterCount;
         beforeCount = mAdapter.getItemCount();
-        Log.d("Delete","\t delete : " + position + "\tPreferences : "+mPreferences.getString(String.valueOf(position),""));
-        mAdapter.removeItem(position);
         mPreferences = getActivity().getSharedPreferences("alarm", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor= mPreferences.edit();
+        Log.d("Delete","\t delete : " + position + "\tPreferences : "+mPreferences.getString(String.valueOf(position),""));
+        mAdapter.removeItem(position);
         editor.remove(String.valueOf(position));
         editor.remove(String.valueOf(position)+"onOff");
+        editor.remove(String.valueOf(position)+"contents");
         editor.apply();
         afterCount = mAdapter.getItemCount();
 
@@ -181,7 +184,11 @@ public class fragment_view_1 extends Fragment implements recyclerAdapter.Recycle
                 for(int j=0;j<beforeCount;j++){
                     if(mPreferences.getString(String.valueOf(j),"")==""){
                         editor.putString(String.valueOf(j),mPreferences.getString(String.valueOf(j+1),""));
+                        editor.putString(String.valueOf(j)+"onOff",mPreferences.getString(String.valueOf(j+1)+"onOff",""));
+                        editor.putString(String.valueOf(j)+"contents",mPreferences.getString(String.valueOf(j+1)+"contents",""));
                         editor.remove(String.valueOf(j+1));
+                        editor.remove(String.valueOf(j+1)+"onOff");
+                        editor.remove(String.valueOf(j+1)+"contents");
                         editor.apply();
                     }
                 }
