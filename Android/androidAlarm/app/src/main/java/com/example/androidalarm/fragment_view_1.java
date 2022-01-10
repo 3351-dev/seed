@@ -57,7 +57,6 @@ public class fragment_view_1 extends Fragment implements recyclerAdapter.Recycle
                 int pos = mAdapter.getItemCount();
                 String temp = "10:00";
                 Log.d("fabClickTest", "pos:"+pos);
-                // Todo
                 mAdapter.addItem(pos, new CardItem(temp,"contents"));
 
                 editor.putString(String.valueOf(pos), temp);

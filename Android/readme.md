@@ -134,3 +134,10 @@ Activity에서 BroadcastReceiver로 데이터 전달
 https://andaeng.tistory.com/27   
 
 * onOff와 contents를 만들었기에 delete키에 추가
+* 알람이 울릴때 작업버튼 추가
+```
+NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "default")
+	.setContentIntent(~~)					// 실행할 작업 인텐트 설정
+	.setDefualt(Notification.DEFAULT_VIBRATE);		// 진동 or 사운드
+	.setPriority(NotificationCompat.PRIORITY_MAX);	// 우선순위
+```
