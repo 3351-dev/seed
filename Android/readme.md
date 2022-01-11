@@ -142,3 +142,13 @@ NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "de
 	.setPriority(NotificationCompat.PRIORITY_MAX);	// 우선순위
 ```
 
+## 0111
+
+* action button 수정   
+Manifest.xml에 다음 코드를 삽입하여 수정 완료   
+>```
+<application>
+<activity android:name=".XXXActivity"/>
+</application>
+```
+

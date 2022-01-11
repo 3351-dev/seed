@@ -1,7 +1,6 @@
 package com.example.androidalarm;
 
 import android.annotation.SuppressLint;
-import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -15,15 +14,22 @@ import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
-public class alarmReceiver extends BroadcastReceiver{
-
-
+public class alarmReceiver extends BroadcastReceiver {
+    public final String CHANNEL_ID = "default";
+    public final int NOTIFICATION_ID = 1;
     SharedPreferences mPreferences;
 
+    // minSdkVersion이 지정한 버전보다 낮을경우 바로 호출시에는 컴파일 발생
+    // 조건문을 통한 분기 처리르 통해 호출해야 에러가 발생하지않음
+    @SuppressLint("UnspecifiedImmutableFlag")
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onReceive(Context context, Intent intent) {
+
+        createNotificationChannel(context);
+
         Toast.makeText(context,"ring ring",Toast.LENGTH_SHORT).show();
         Log.d("Alarm Receiver", "ring ring");
 
@@ -34,61 +40,53 @@ public class alarmReceiver extends BroadcastReceiver{
         String title = mPreferences.getString(pos,"");
         String contents = mPreferences.getString(pos+"contents","");
 
-        // 채널 생성
-//        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "default");
-//        builder.addAction(R.drawable.ic_launcher_background,"notification Test",intent);
+        //snooze, cancel Activity setting
+        Intent MainIntent = new Intent(context, MainActivity.class);
+        MainIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        PendingIntent MainPendingIntent;
+        MainPendingIntent = PendingIntent.getActivity(context, 0, MainIntent, PendingIntent.FLAG_ONE_SHOT);
 
-        // Icon, title, contents
-        //builder.setSmallIcon(R.drawable.ic_launcher_background);
-        // builder.setContentTitle(title);
-        // builder.setContentText(contents);
-        // builder.setAutoCancel(true);
+        Intent snoozeIntent = new Intent(context, SNZActivity.class);
+        snoozeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        snoozeIntent.putExtra("value","3351");
+        PendingIntent SNZPendingIntent = PendingIntent.getActivity(context, 0, snoozeIntent, PendingIntent.FLAG_ONE_SHOT);
 
-        // Notification Test
-        Intent snoozeIntent = new Intent(context,alarmReceiver.class);
+        Intent cancelIntent = new Intent(context, cancelActivity.class);
+        cancelIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        PendingIntent cancelPendingIntent = PendingIntent.getActivity(context, 0, cancelIntent, PendingIntent.FLAG_ONE_SHOT);
 
-        Intent cancel = new Intent(context, cancelActivity.class);
-        cancel.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        @SuppressLint("UnspecifiedImmutableFlag")
-        PendingIntent cancelPendingIntent = PendingIntent.getActivity(context,(int) (System.currentTimeMillis()/1000 ),cancel,PendingIntent.FLAG_ONE_SHOT);
-
-
-        //snoozeIntent.setAction(ACTION_SNOOZE);
-        // snoozeIntent.putExtra(EXTRA_NOTIFICATION_ID,0);
-
-        // Todo
-        /*
-            * setContentIntent(~~~) : 실행할 작업 인텐트를 설정
-            * setAutoCancel(true)   : 탭하면 자동으로 알림을 삭제
-            *
-            *
-        */
-        @SuppressLint("UnspecifiedImmutableFlag")
-        PendingIntent snoozePendingIntent = PendingIntent.getBroadcast(context,0,snoozeIntent,0);
-        NotificationCompat.Builder builder1 =
-                new NotificationCompat.Builder(context,"default")
+        // Alarm Setting
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context,CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_launcher_background)
                 .setContentTitle(title)
                 .setContentText(contents)
-                .setPriority(NotificationCompat.PRIORITY_MAX)
-                .addAction(R.drawable.off_radius, "SNZ",snoozePendingIntent)
-                .addAction(R.drawable.off_radius, "Cancel",cancelPendingIntent)
-                .setAutoCancel(true)
-                .setContentIntent(cancelPendingIntent)
-                .setDefaults(Notification.DEFAULT_VIBRATE); // vibrate setting
+                .setPriority(NotificationManagerCompat.IMPORTANCE_MAX)
+                .setContentIntent(MainPendingIntent)
+                .addAction(R.drawable.ic_launcher_background,"SNZ",SNZPendingIntent)
+                .addAction(R.drawable.ic_launcher_background,"Cancel",cancelPendingIntent);
 
-        // 알림 매니저 생성
-        NotificationManager notificationManager =
-                (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        // 알림 매니저에 채널등록
-        notificationManager.createNotificationChannel(new NotificationChannel("default","default",NotificationManager.IMPORTANCE_DEFAULT));
-
-        // 알람의 고유한 id는 적당한 정수값을 넣어줌
-        notificationManager.notify(1,builder1.build());
-        // SNZ 클릭시 여러개의 알림 계속 생성(시간이 다 다르므로)
-//        notificationManager.notify((int) (System.currentTimeMillis()/1000),builder1.build());
-
-
+        NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(context);
+        notificationManagerCompat.notify(NOTIFICATION_ID,builder.build());
     }
+
+    private void createNotificationChannel(Context context){
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            CharSequence name = "default";
+            String description = "default";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+
+            // Create Channel
+            NotificationChannel notificationChannel = new NotificationChannel(CHANNEL_ID, name, importance );
+            notificationChannel.setDescription(description);
+
+            // Create AlarmManager setting
+            NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+
+            // register Channel in AlarmManager
+            notificationManager.createNotificationChannel(notificationChannel);
+
+        }
+    }
+
 
 }
