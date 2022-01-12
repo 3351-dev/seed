@@ -43,6 +43,7 @@ public class MainActivity extends FragmentActivity {
         assert actionBar!= null;
         actionBar.hide();*/
 
+
         fragment1 = new fragment_view_1();
         fragment2 = new fragment_view_2();
         fragment3 = new fragment_view_3();

@@ -136,7 +136,8 @@ https://andaeng.tistory.com/27
 * onOff와 contents를 만들었기에 delete키에 추가
 * 알람이 울릴때 작업버튼 추가
 ```
-NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "default")
+NotificationCompat.Builder builder 
+	= new NotificationCompat.Builder(context, "default")
 	.setContentIntent(~~)					// 실행할 작업 인텐트 설정
 	.setDefualt(Notification.DEFAULT_VIBRATE);		// 진동 or 사운드
 	.setPriority(NotificationCompat.PRIORITY_MAX);	// 우선순위
@@ -146,9 +147,23 @@ NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "de
 
 * action button 수정   
 Manifest.xml에 다음 코드를 삽입하여 수정 완료   
->```
+```
 <application>
 <activity android:name=".XXXActivity"/>
 </application>
 ```
+	* getActivity : <activity android:name=".XXX" />
+	* getBroadcast : <receiver android:name=".XXX" />
+	* getService : <service android:name=".XXX" />
+
+
+## 0112
+
+* Log 설정 방법
+https://minggu92.tistory.com/18
+
+* pendingIntent
+getActivity, getService, getBroadcast 설정 잘 확인할것.
+manifest 설정 또한 확인!
+
 

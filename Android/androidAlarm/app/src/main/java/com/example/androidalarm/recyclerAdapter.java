@@ -29,6 +29,7 @@ import java.util.List;
 
 public class recyclerAdapter extends RecyclerView.Adapter<recyclerAdapter.ViewHolder> {
 
+    private final String TAG = this.getClass().getSimpleName();
     private final List<CardItem> mDataList;
     final Context mContext;
     private RecyclerViewClickListener mListener;
@@ -161,28 +162,20 @@ public class recyclerAdapter extends RecyclerView.Adapter<recyclerAdapter.ViewHo
 
                         Intent intent = new Intent(mContext, alarmReceiver.class);
                         // alarmReceiver 값 전달
-                        intent.putExtra("123","123");
-
+//                        intent.putExtra("123","123");
+                        intent.putExtra("pos",pos);
                         PendingIntent operation = PendingIntent.getBroadcast(mContext,
                                 pos,
                                 intent,
                                 PendingIntent.FLAG_UPDATE_CURRENT);
 
-                        // Builder Test
-                        /*NotificationCompat.Builder builder = new NotificationCompat.Builder(mContext)
-                                .addAction(R.drawable.toggle,"test",operation)
-                                .setContentTitle("title");
-                        builder.setContentIntent(operation);
-                        builder.addAction(R.drawable.off_radius,"hey",operation);
-                        Notification notification = builder.build();*/
-
-
-                        mAlarmManager.setExact(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),operation);
 
                         editor.putString(String.valueOf(pos)+"onOff","on");
                         editor.apply();
 
-                        Log.d("OnOff"," ON "+str+" "+time[0] + " "+time[1]);
+                        mAlarmManager.setExact(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),operation);
+
+                        Log.d("OnOff"," ON "+str+" // split "+time[0] + " "+time[1]+" // pos "+pos);
                         holder.title.setTextColor(Color.BLUE);
                         holder.contents.setTextColor(Color.BLUE);
                     }else{

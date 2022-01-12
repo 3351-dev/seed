@@ -20,7 +20,7 @@
             </intent-filter>
         </activity>
         <receiver android:name=".alarmReceiver"/>
-        <activity android:name=".SNZActivity"/>
+        <receiver android:name=".snzReceiver"/>
         <activity android:name=".cancelActivity"/>
     </application>
 

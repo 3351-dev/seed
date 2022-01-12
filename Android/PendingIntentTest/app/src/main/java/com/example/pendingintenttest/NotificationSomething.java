@@ -26,7 +26,7 @@ public class NotificationSomething extends AppCompatActivity {
         if(extras == null) {
             s = "error";
         }else{
-//            id = extras.getInt("value");
+//            id = extras.getInt("notificationID");
             id = extras.getInt("notificationID");
             extraData = extras.getString("extraString");
         }

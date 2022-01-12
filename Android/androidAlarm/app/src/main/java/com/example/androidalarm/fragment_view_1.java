@@ -55,7 +55,7 @@ public class fragment_view_1 extends Fragment implements recyclerAdapter.Recycle
             @Override
             public void onClick(View view) {
                 int pos = mAdapter.getItemCount();
-                String temp = "10:00";
+                String temp = "08:00";
                 Log.d("fabClickTest", "pos:"+pos);
                 mAdapter.addItem(pos, new CardItem(temp,"contents"));
 

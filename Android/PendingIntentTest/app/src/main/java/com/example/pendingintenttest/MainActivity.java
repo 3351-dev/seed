@@ -31,26 +31,20 @@ public class MainActivity extends AppCompatActivity {
         button.setOnClickListener(view -> NotificationSomethings());
     }
 
-
     private void NotificationSomethings() {
         int notification_id = 3351;
-
         Log.d("Main","Hello");
             // channel
         createNotificationChannel();
-
+        // PendingIntent
         Intent notificationIntent = new Intent(this, NotificationSomething.class);
         notificationIntent.putExtra("notificationID",notification_id);
         notificationIntent.putExtra("extraString","Hello PendingIntent");
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent,PendingIntent.FLAG_UPDATE_CURRENT);
 
-        Intent snoozeIntent = new Intent(this, SNZActivity.class);
-        snoozeIntent.putExtra("notificationID",notification_id);
-        snoozeIntent.putExtra("value","Value 3351");
-        PendingIntent snoozePendingIntent = PendingIntent.getActivity(this, 0, snoozeIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        Intent cancelIntent = new Intent(this, cancelActivity.class);
-        PendingIntent cancelPendingIntent = PendingIntent.getActivity(this, 0, cancelIntent, PendingIntent.FLAG_ONE_SHOT);
+        Intent receiveIntent = new Intent(this, testReceiver.class);
+        receiveIntent.putExtra("3351","Hello 3351~!");
+        PendingIntent receivePendingIntent = PendingIntent.getBroadcast(this, 0, receiveIntent,PendingIntent.FLAG_UPDATE_CURRENT);
 
         // 반드시 채널 이름 추가해줄것! 그렇지않으면 channel null blabla.. 오류 뜸
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this,CHANNEL_ID);
@@ -58,14 +52,13 @@ public class MainActivity extends AppCompatActivity {
         builder.setContentTitle("Title")
                 .setContentText("Sub title")
                 .setTicker("Message")
-                .setSmallIcon(R.drawable.ic_launcher_background)
+                .setSmallIcon(R.drawable.ic_baseline_whatshot_24)
                 .setContentIntent(contentIntent)
-                .setAutoCancel(true)
+//                .setAutoCancel(true)
                 .setWhen(System.currentTimeMillis())
                 .setDefaults(Notification.DEFAULT_ALL)
                 .addAction(R.drawable.ic_launcher_background,"contents",contentIntent)
-                .addAction(R.drawable.ic_launcher_background,"SNZ",snoozePendingIntent)
-                .addAction(R.drawable.ic_launcher_background,"Cancel",cancelPendingIntent);
+                .addAction(R.drawable.ic_launcher_background,"check",receivePendingIntent);
 
         NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         nm.notify(notification_id,builder.build());
