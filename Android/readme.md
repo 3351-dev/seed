@@ -152,18 +152,48 @@ Manifest.xml에 다음 코드를 삽입하여 수정 완료
 <activity android:name=".XXXActivity"/>
 </application>
 ```
-	* getActivity : <activity android:name=".XXX" />
-	* getBroadcast : <receiver android:name=".XXX" />
-	* getService : <service android:name=".XXX" />
+	getActivity : <activity android:name=".XXX" />
+	getBroadcast : <receiver android:name=".XXX" />
+	getService : <service android:name=".XXX" />
 
 
 ## 0112
 
-* Log 설정 방법
+* Log 설정 방법   
 https://minggu92.tistory.com/18
 
-* pendingIntent
-getActivity, getService, getBroadcast 설정 잘 확인할것.
-manifest 설정 또한 확인!
+* pendingIntent   
+getActivity, getService, getBroadcast 설정 잘 확인할것.   
+manifest 설정 또한 확인!   
 
+## 0113
 
+* Channel_ID와 notification_ID를 잘 구분할 것   
+* Channel 설정은 보낼때만 필요함   
+* Switch
+	switch.setChecked(true/false)를 switch.toggle()로 설정하면 된다   
+? LayoutInflater   
+* 강제 클릭 이벤트 처리
+	클릭 이벤트 : btn.performClick();   
+	롱 클릭 이벤트 : btn.performLongClick();   
+* TAG
+private final String TAG = this.getClass().getSimpleName();   
+   
+? mAdapter.notifyDataChanged();   
+? recyclerView.invalidate();   
+* Fragment ~ Activty
+1. Activity method call from Fragment   
+```
+((MainActivity)getActivty()).XXX();
+```
+2. Fragment function call from Activity   
+```
+YourFragment tf = (YourFragment) getSupportFragmentManager().findFragmentById(R.id.frag);   
+tf.XXX();
+```
+! snzReceiver > MainActivity > fragment_view_1   
+알람어플이 켜져있지않으면 팅기는 오류 발생
+
+* Multiple Notification   
+Notify ID를 다르게 설정해준다   
+notificationManager.notify(int id, Notification notification)   

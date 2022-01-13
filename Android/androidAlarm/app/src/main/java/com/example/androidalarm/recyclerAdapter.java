@@ -173,7 +173,9 @@ public class recyclerAdapter extends RecyclerView.Adapter<recyclerAdapter.ViewHo
                         editor.putString(String.valueOf(pos)+"onOff","on");
                         editor.apply();
 
+//                        setExactAndAllowWhileIdle
                         mAlarmManager.setExact(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),operation);
+//                        mAlarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),operation);
 
                         Log.d("OnOff"," ON "+str+" // split "+time[0] + " "+time[1]+" // pos "+pos);
                         holder.title.setTextColor(Color.BLUE);
@@ -304,7 +306,7 @@ public class recyclerAdapter extends RecyclerView.Adapter<recyclerAdapter.ViewHo
                             && !thu.isChecked() && !fri.isChecked()
                             && !sat.isChecked()){
                         Log.d(" ", "repeat off");
-                        repeat.setChecked(false);
+                        repeat.toggle();
                         repeat_view.setVisibility(View.GONE);
                     }
                 }
@@ -445,6 +447,7 @@ public class recyclerAdapter extends RecyclerView.Adapter<recyclerAdapter.ViewHo
                 }
 
             });
+
             /*label_view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

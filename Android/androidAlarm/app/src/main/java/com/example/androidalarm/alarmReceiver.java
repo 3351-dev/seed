@@ -33,7 +33,7 @@ public class alarmReceiver extends BroadcastReceiver {
         createNotificationChannel(context);
 
         Toast.makeText(context,"ring ring",Toast.LENGTH_SHORT).show();
-        Log.d("Alarm Receiver", "ring ring");
+        Log.d(TAG, "ring ring");
 
         mPreferences = context.getSharedPreferences("alarm", Context.MODE_PRIVATE);
 
@@ -57,7 +57,7 @@ public class alarmReceiver extends BroadcastReceiver {
         snoozeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         snoozeIntent.putExtra("pos",pos);
         PendingIntent SNZPendingIntent
-                = PendingIntent.getBroadcast(context, 0
+                = PendingIntent.getBroadcast(context, Integer.parseInt(pos)
                 , snoozeIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
             // cancel
@@ -75,12 +75,12 @@ public class alarmReceiver extends BroadcastReceiver {
                 .setPriority(NotificationManagerCompat.IMPORTANCE_MAX)
                 .setContentIntent(MainPendingIntent)
                 .setAutoCancel(true)
-                .addAction(R.mipmap.ic_launcher,"Snooze",SNZPendingIntent)
+                .addAction(R.mipmap.ic_launcher,"dismiss",SNZPendingIntent)
 //                .addAction(R.drawable.ic_launcher_background,"Cancel",cancelPendingIntent)
                 ;
 
         NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(context);
-        notificationManagerCompat.notify(NOTIFICATION_ID,builder.build());
+        notificationManagerCompat.notify(Integer.parseInt(pos),builder.build());
     }
 
     private void createNotificationChannel(Context context){

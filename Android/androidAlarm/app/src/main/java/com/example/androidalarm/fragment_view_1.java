@@ -50,6 +50,8 @@ public class fragment_view_1 extends Fragment implements recyclerAdapter.Recycle
         mPreferences = getActivity().getSharedPreferences("alarm", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = mPreferences.edit();
 
+        mAdapter.notifyDataSetChanged();
+
         fab = (FloatingActionButton) rootView.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,14 +95,11 @@ public class fragment_view_1 extends Fragment implements recyclerAdapter.Recycle
         // RecyclerView Adapter
 //        recyclerAdapter recyclerAdapter = new recyclerAdapter(dataList,getContext());
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+
 //        recyclerView.setAdapter(recyclerAdapter);
 
-
         recyclerView.setAdapter(mAdapter);
-
-        // Preferences Setting
-//        mPreferences = PreferenceManager.getDefaultSharedPreferences(myContext);
-//        mPreferences = getActivity().getSharedPreferences("alarm", Context.MODE_PRIVATE);
 
         // Bundle
         if(getArguments()!= null){
@@ -109,9 +108,6 @@ public class fragment_view_1 extends Fragment implements recyclerAdapter.Recycle
             hour = getArguments().getString("hour");
             minute = getArguments().getString("minute");
             pos = getArguments().getString("pos");
-
-//            pos = mAdapter.getItemCount();      //(error) pos = 0
-//            Log.d("Bundle getItemCount",""+pos);
 
             String value = hour+":"+minute;
             editor.putString(String.valueOf(pos), value);
@@ -124,6 +120,14 @@ public class fragment_view_1 extends Fragment implements recyclerAdapter.Recycle
         getPreferences();
 
         return rootView;
+    }
+
+    public void getRefresh(){
+        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+        fragment_view_1 fragment_view_1 = new fragment_view_1();
+        transaction.replace(R.id.container, fragment_view_1);
+        transaction.commit();
+//        mAdapter.notifyDataSetChanged();
     }
 
     private void getPreferences() {
@@ -210,7 +214,6 @@ public class fragment_view_1 extends Fragment implements recyclerAdapter.Recycle
         Bundle bundle = new Bundle();
         bundle.putInt("pos",position);
         bundle.putInt("ItemCount",ItemCount);
-
         /*----------------------------------------------------------------------*/
 
         FragmentManager fragmentManager = myContext.getSupportFragmentManager();
