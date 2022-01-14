@@ -2,7 +2,7 @@
 ### Android Animation   
 * https://fornewid.medium.com/android-ui%EC%97%90-animation-%EB%93%A4%EC%9D%B4%EB%B6%93%EA%B8%B0-e95cabbb517c   
 
-### TabLayout   
+### TabLayout
 * https://ju-hy.tistory.com/54   
 
 ## 1229~1230
@@ -11,14 +11,14 @@
    
 * LinearLayout에 Visibility 추가
 
-### 참고 블로그   
+### 참고 블로그
 * https://parkho79.tistory.com/152?category=798724   
 
-### Repeat 클릭시 요일 출력   
+### Repeat 클릭시 요일 출력
 
 * Repeat checkbox   
 
-### 요일 클릭시 background 전환   
+### 요일 클릭시 background 전환
 
 * ToggleButton   
 
@@ -36,7 +36,7 @@
 
 ## 0103
 
-### Timepicker ADD   
+### Timepicker ADD
 * Error   
 	* getSupportFragmentManager : Fragment Activity의 메소드   
 	* ViewHolder에서 구현하려고 하니 잘 되지 않네요..   
@@ -61,7 +61,7 @@
 	
 ## 0105
 
-### Fragment ~ Fragment 값 전달   
+### Fragment ~ Fragment 값 전달
 * Intent : 데이터를 전달   	
 * Bundle : 데이터를 저장   
 * Bundle을 이용해서 값 반환   
@@ -197,3 +197,43 @@ tf.XXX();
 * Multiple Notification   
 Notify ID를 다르게 설정해준다   
 notificationManager.notify(int id, Notification notification)   
+
+## 0114
+
+? 모던클래스   
+>현실 세계에 존재하는 사물 또는 객체를 표현하기 위해 클래스로 작상한 것   
+>날씨, 사람 학생 등의 속성과 동작을 클래스로 표현
+
+* LayoutInflater   
+	- Activity 이외의 클래스에서 Context를 통해 XML로 정의한 레이아웃을  로드하여 View로 반환하는 클래스
+
+* tools:listitem="@layout/item_weather"
+	- PreView에서 미리 확인 할 수 있다.
+
+* 날씨에 따라 이미지를 매칭하기 위해 HashMap 사용
+```
+private Map<String, Integer> mWetherImageMap;
+// 선언 후 생성자에 추가
+public Adapter(List<Weather> data){
+	mWeatherImageMap.put("XXx",R.drawable.XXX);
+}
+// 이후 getView에 설정해준다
+public View getView(int position, View convertView, ViewGroup parent){
+	weatherImage.setImageResource(mWeatherImageMap.get(weather.getWeather()));
+}
+```
+* Activity LifeCycle
+	- onCrate()		객체 생성, 초기화		시작될때   
+	- onStart()		화면이 보일때 처리 	보이기 직전   
+	- onResume()	화면이 보일때 처리 	완전히 보일때   
+	- onPause()		화면이 안보일때 처리 	포커스를 잃었을때   
+	- onStop()		화면이 안보일때 처리 	완전히 보이지 않을때   
+	- onDestroy()	메모리 해제			종료되기 직전   
+	
+	- 정지 및 재실행 		: onStop() -> onRestart() -> onStart()
+	- 강제 종료 및 실행 	: onStop() -> onCreate()
+
+* BookLifeCycleExam
+* BookFragmentExam
+* BookCallbackExam
+* BookScreenClideExam
