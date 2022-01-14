@@ -223,12 +223,12 @@ public View getView(int position, View convertView, ViewGroup parent){
 }
 ```
 * Activity LifeCycle
-	- onCrate()		객체 생성, 초기화		시작될때   
-	- onStart()		화면이 보일때 처리 	보이기 직전   
-	- onResume()	화면이 보일때 처리 	완전히 보일때   
-	- onPause()		화면이 안보일때 처리 	포커스를 잃었을때   
-	- onStop()		화면이 안보일때 처리 	완전히 보이지 않을때   
-	- onDestroy()	메모리 해제			종료되기 직전   
+	- onCrate()    객체 생성, 초기화    시작될때   
+	- onStart()    화면이 보일때 처리    보이기 직전   
+	- onResume()    화면이 보일때 처리    완전히 보일때   
+	- onPause()    화면이 안보일때 처리    포커스를 잃었을때   
+	- onStop()    화면이 안보일때 처리    완전히 보이지 않을때   
+	- onDestroy()    메모리 해제    종료되기 직전   
 	
 	- 정지 및 재실행 		: onStop() -> onRestart() -> onStart()
 	- 강제 종료 및 실행 	: onStop() -> onCreate()
