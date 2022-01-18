@@ -46,14 +46,14 @@
                 android:background="?android:attr/selectableItemBackground"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentBottom="true"
-                android:src="@drawable/ic_baseline_keyboard_arrow_down_24"
+                android:src="@drawable/ic_baseline_keyboard_arrow_up_24"
                 />
         </RelativeLayout>
 
 <!--        Contents         -->
         <LinearLayout
             android:id="@+id/contents_part"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
@@ -64,29 +64,34 @@
                 android:padding="16dp"
                 android:text="Contents"/>
 
+
     <!--        Button         -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 >
-
                 <Button
                     android:id="@+id/btn_1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="?android:attr/selectableItemBackground"
-                    android:textColor="#00921a"
-                    android:text="Btn 1"
+                    android:text="Btn 111"
+                    android:textColor="@color/black"
+                    android:padding="16dp"
                     />
+
                 <Button
                     android:id="@+id/btn_2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="?android:attr/selectableItemBackground"
-                    android:text="Btn 2222222222222222"
+                    android:text="Remove"
+                    android:textColor="@color/purple_700"
+                    android:padding="16dp"
                     />
+
             </LinearLayout>
+
         </LinearLayout>
 
     </LinearLayout>
