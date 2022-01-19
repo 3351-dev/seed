@@ -236,8 +236,27 @@ public View getView(int position, View convertView, ViewGroup parent){
 * BookLifeCycleExam
 * BookFragmentExam
 * BookCallbackExam
-* BookScreenClideExam
+* BookScreenSlideExam
 
 ## 0115
 
 * Adapter
+
+## 0118
+
+* RecyclerView Click Event   
+어댑터의 마지막 부분에 콜백 인터페이스와 이를 외부에서 연결할 수 있는 setter 메소드 작성   
+
+* TTS
+* Google Colab 런타임 연결 끊김 방지   
+https://teddylee777.github.io/colab/google-colab-%EB%9F%B0%ED%83%80%EC%9E%84-%EC%97%B0%EA%B2%B0%EB%81%8A%EA%B9%80%EB%B0%A9%EC%A7%80   
+```
+function ClickConnect(){
+    console.log("코랩 연결 끊김 방지"); 
+    document.querySelector("colab-toolbar-button#connect").click() 
+}
+setInterval(ClickConnect, 60 * 1000)
+```
+
+* Docker, Mimic-Recording-Studio, ...
+Mimic-recording-studio : only Window
