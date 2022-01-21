@@ -25,4 +25,4 @@ wav 파일로 저장하기 위해서 soudfile을 설치해주었다.
 ```
 pip install soundfile
 ```
-data 폴더내에 음성데이터가 생성됨을 확인할 수 있다.   
+data 폴더내에 음성데이터가 생성됨을 확인할 수 있다!   
