@@ -91,3 +91,5 @@ deactivate  # don't exit until you're done using TensorFlow
 
 ## 기본 분류 : 의류 이미지 분류
 https://www.tensorflow.org/tutorials/keras/classification?hl=ko
+
+## ㅇㅅㅇ
