@@ -166,3 +166,28 @@ Dockerfile로 image파일을 한번에 만들어준다.
 기존 7,8Gb를 먹는 용량을 대축 줄였다.(3Gb)   
 참고 사이트 : https://blog.d0ngd0nge.xyz/docker-dockerfile-write/   
 p.s 학습데이터는 용량이 너무 커서 따로 받아줘야한다.   
+
+
+### jupyter
+
+* 설치
+```
+pip install jupyter
+```
+* config 생성 및 수정
+```
+jupyter notebook --generate-config -y
+
+ipython > from notebook.auth import passwd > passwd() > out저장!
+
+vi /root/.jupyter/jupyter_notebook_config.py
+c.NaotebookApp.password를 설정해준다.
+```
+* 서버 실행
+
+
+
+```
+docker run -d -it --privileged --name jupyter -p 8888:8888 3351dev/tts
+```
+container에 접속안될때 --privileged 모드로 접속
