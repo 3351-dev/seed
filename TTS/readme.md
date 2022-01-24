@@ -92,4 +92,71 @@ deactivate  # don't exit until you're done using TensorFlow
 ## 기본 분류 : 의류 이미지 분류
 https://www.tensorflow.org/tutorials/keras/classification?hl=ko
 
-## ㅇㅅㅇ
+# 0124
+
+## Docker
+참고 사이트 : http://pyrasis.com/Docker/Docker-HOWTO   
+
+### start
+```
+docker run -it --name hello ubuntu /bin/bash
+```
+이미지가 저장되어 있는지 확인하고 없으면 다운로드를 하고 컨테이너를 생성하며 시작   
+! 기존의 가상화 방식은 주로 OS를 가상화하여 무겁고 느렸음.   
+프로세스를 격리하는 방식(가볍고 빠름)   
+
+### delete
+docker 이미지 삭제   
+```
+docker images
+docker rmi XXX
+docker images
+```
+
+docker 컨테이너 삭제   
+```
+docker ps -a
+docker rm XXX
+docker ps -a
+```
+   
+docker commit & pull
+```
+docker login
+docker tag XXX USER_ID/XXX
+docker commit CONTAINER IMAGE_NAME
+docker pull USER_ID/XXX
+```
+
+docker ~ Container file
+```
+host to conatiner
+docker cp /path/foo.txt mycontainer:/path/foo.txt
+
+container to host
+docker cp mycontainer:/path/foo.txt /path/foo.txt
+```
+
+
++ docker setting [install]
+	* vim
+	* python3
+	* git
+	* pip
+	  
+  	* mecab-ko, mecab-ko-dic, mecab, python-mecab-ko
+  		- 여기서 또 문제 발생.. 해결했으나 무엇이 문제였는지 파악 불가..
+  	* libsndfile1
+
+docker에서 샘플데이터로 학습한 결과를 출력시 정상 출력 확인.   
+이로써 docker에서 학습 및 실행결과 출력 가능   
+>데이터만 있으면 학습 가능?!   
+
++ additional install
+	* tensorflow
+	* tensorboard : 타 블로그에서 tensorflow만 있으면 안된다고하여 설치   
+
+```	
+none tag delete
+docker rmi $(docker images -f "dangling=true" -q)
+```
