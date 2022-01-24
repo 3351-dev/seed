@@ -160,3 +160,9 @@ docker에서 샘플데이터로 학습한 결과를 출력시 정상 출력 확�
 none tag delete
 docker rmi $(docker images -f "dangling=true" -q)
 ```
+
+### Dockerfile
+Dockerfile로 image파일을 한번에 만들어준다.   
+기존 7,8Gb를 먹는 용량을 대축 줄였다.(3Gb)   
+참고 사이트 : https://blog.d0ngd0nge.xyz/docker-dockerfile-write/   
+p.s 학습데이터는 용량이 너무 커서 따로 받아줘야한다.   
