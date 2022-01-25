@@ -191,3 +191,19 @@ c.NaotebookApp.password를 설정해준다.
 docker run -d -it --privileged --name jupyter -p 8888:8888 3351dev/tts
 ```
 container에 접속안될때 --privileged 모드로 접속
+
+# 0125
+
+https://wikidocs.net/book/2155
+
+## Word2Vec
+https://word2vec.kr/search/
+
+* knolpy import , No JVM problem
+https://ssamko.tistory.com/64
+
+[Dockfile]
+RUN apt install defualt-jdk -y
+[CMD]
+apt install default-jdk
+
