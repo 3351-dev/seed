@@ -218,3 +218,26 @@ apt install default-jdk
 ```
 docker container prune
 ```
+
+* 참고할만한 블로그
+https://blog.naver.com/PostView.naver?blogId=shino1025&logNo=222463015437&categoryNo=0&parentCategoryNo=0&viewDate=&currentPage=1&postListTopCurrentPage=1&from=postView&userTopListOpen=true&userTopListCount=30&userTopListManageOpen=false&userTopListCurrentPage=1
+
+* 안드로이드 TTS, STT 예제
+https://imleaf.tistory.com/13
+
+* zip
+```
+zip -r test.zip ./*
+```
+
+* Add the package repositories
+distribution=$(. /etc/os-release;echo $ID$VERSION_ID)
+curl -s -L https://nvidia.github.io/nvidia-docker/gpgkey | sudo apt-key add -
+curl -s -L https://nvidia.github.io/nvidia-docker/$distribution/nvidia-docker.list | sudo tee /etc/apt/sources.list.d/nvidia-docker.list
+
+sudo apt-get update && sudo apt-get install -y nvidia-container-toolkit
+sudo systemctl restart docker
+
+```
+torch.cuda.empty_cache()
+```
