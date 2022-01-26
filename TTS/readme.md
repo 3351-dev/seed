@@ -211,6 +211,10 @@ apt install default-jdk
 # 0126
 
 * docker build -t 3351dev/jupyter ./
-* docker run -it --user kseek -v (`^`)/seedBox/NLP/jupyter /jupyterdata
+* docker run -it --user kseek -v (`^`)/seedBox/NLP/jupyter /home/kseek/jupyter
 * ./NLP/Docerfile은 sudo를 사용할 수 있게 만든 Dockerfile이다.
 
+* 중지된 모든 컨테이너를 일괄 삭제
+```
+docker container prune
+```
