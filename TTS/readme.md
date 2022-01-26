@@ -156,8 +156,8 @@ docker에서 샘플데이터로 학습한 결과를 출력시 정상 출력 확�
 	* tensorflow
 	* tensorboard : 타 블로그에서 tensorflow만 있으면 안된다고하여 설치   
 
+* None tage deleter
 ```	
-none tag delete
 docker rmi $(docker images -f "dangling=true" -q)
 ```
 
@@ -202,8 +202,15 @@ https://word2vec.kr/search/
 * knolpy import , No JVM problem
 https://ssamko.tistory.com/64
 
-[Dockfile]
-RUN apt install defualt-jdk -y
-[CMD]
-apt install default-jdk
+[Dockerfile]   
+RUN apt install defualt-jdk -y   
+[CMD]   
+apt install default-jdk   
+
+
+# 0126
+
+* docker build -t 3351dev/jupyter ./
+* docker run -it --user kseek -v (`^`)/seedBox/NLP/jupyter /jupyterdata
+* ./NLP/Docerfile은 sudo를 사용할 수 있게 만든 Dockerfile이다.
 
