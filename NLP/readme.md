@@ -166,3 +166,27 @@ pip install -r requirement.txt
 * 행동인식 블로그
 https://blog.naver.com/PostView.naver?blogId=sogangori&logNo=222146039609&parentCategoryNo=&categoryNo=&viewDate=&isShowPopularPosts=false&from=postView
 
+
+# 0128
+
+* 전처리 방법
+```
+def rule(x):
+    # 괄호
+    a = re.compile(r'\([^)]*\)')
+    # 문장 부호
+    b = re.compile('[^가-힣 ]')
+    x = re.sub(pattern=a, repl='', string= x)
+    x = re.sub(pattern=b, repl='', string= x)
+    return x
+```
+* Docker -v option
+  - https://0902.tistory.com/6
+
+* PCM Play for Linux
+  - https://stackoverflow.com/questions/20314739/how-to-play-pcm-sound-file-in-ubuntu
+```
+ffplay -f s16le -ar 16k -ac 1 snake.raw
+ffplay -f f32le -ar 48000 -ac 2 snake.raw
+```
+
