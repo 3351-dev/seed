@@ -186,7 +186,41 @@ def rule(x):
 * PCM Play for Linux
   - https://stackoverflow.com/questions/20314739/how-to-play-pcm-sound-file-in-ubuntu
 ```
-ffplay -f s16le -ar 16k -ac 1 snake.raw
+ffplay -f s16le -ar 16k -ac 1 -autoexit
 ffplay -f f32le -ar 48000 -ac 2 snake.raw
 ```
 
+# 0203
+
+* Colab으로 돌립니다... 컴퓨터 너무 느려요   
+01.28 14:46 Start   
+02.03 06:44 Epoch 2 End   
+딱 일주일 학습만에 epoch 2 끝.   
+
+Colab 단점, 데이터가 많은 것을 구글 드라이브에 올려야한다.. Local 마운트는 왜 안될까?   
+
+
+* CycleGAN 개재밌어보임 ㅋㅋ   
+
+
+* data scientist
+https://theorydb.github.io/dev/2020/04/12/dev-competition-how-to-become-data-scientist/
+
+* Deep Learning 
+https://tensorflow.blog/page/6/?wref=bif
+
+* 재밌는 프로젝트
+https://diy-project.tistory.com/106
+
+* 딥러닝 학습 (TTS)
+  + 음성 신호에서 텍스트 전처리를 통해 언어적 특징벡터를 추출한 후 이 값을 입력으로 함
+  + 음성 신호의 Vocoder parameter를 출력으로 학습
+  + 기존 음성 합성 방식에서는 발성 기관 구조 및 원리의 이해와 문자에서 발음 표기로 변환하는 언어적 지시 및 음성 스펙트럼의 세부적인 특성 등 다양한 음성학, 음운론, 음성 신호처리 관련 지식이 필요 했음
+  + 하지만 딥러닝 기술 기반에서는 입력과 출력 데이터만 있으면 됨.
+  + 기계가 자동으로 중간 과정을 찾아서 모델링하고 모델값을 저장해 음성을 바로 합성 
+  + 요즘은 End to End를 연구중.(수천 명 이상의 목소리를 하나의 TTS 모델에서 합성하는 모델)
+* 참고사이트
+https://blog.ncsoft.com/%EA%B2%8C%EC%9E%84%EA%B3%BC-ai-5-%EC%9D%8C%EC%84%B1-%ED%95%A9%EC%84%B1-%EA%B8%B0%EC%88%A0/
+
++ Morphing 기법을 활용한 대화구문기반 영상 콘텐츠 저작도구 시스템 내 3D 캐릭터 립싱크 애니메이션 제작 
+https://www.earticle.net/Article/A181923
