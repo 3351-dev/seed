@@ -162,6 +162,7 @@ pip install -r requirement.txt
 ```
 
 * TTS는 잘 돌아간다!
+boxboxbox/TTS/test.py
 
 * 행동인식 블로그
 https://blog.naver.com/PostView.naver?blogId=sogangori&logNo=222146039609&parentCategoryNo=&categoryNo=&viewDate=&isShowPopularPosts=false&from=postView
@@ -200,7 +201,7 @@ ffplay -f f32le -ar 48000 -ac 2 snake.raw
 Colab 단점, 데이터가 많은 것을 구글 드라이브에 올려야한다.. Local 마운트는 왜 안될까?   
 
 
-* CycleGAN 개재밌어보임 ㅋㅋ   
+* CycleGAN 재밌어보임 ㅋㅋ   
 
 
 * data scientist
