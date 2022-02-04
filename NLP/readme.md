@@ -225,3 +225,17 @@ https://blog.ncsoft.com/%EA%B2%8C%EC%9E%84%EA%B3%BC-ai-5-%EC%9D%8C%EC%84%B1-%ED%
 
 + Morphing 기법을 활용한 대화구문기반 영상 콘텐츠 저작도구 시스템 내 3D 캐릭터 립싱크 애니메이션 제작 
 https://www.earticle.net/Article/A181923
+
+
+# 0204
+
+* 기계학습, 얼굴인
+https://medium.com/@jongdae.lim/%EA%B8%B0%EA%B3%84-%ED%95%99%EC%8A%B5-machine-learning-%EC%9D%80-%EC%A6%90%EA%B2%81%EB%8B%A4-part-4-63ed781eee3c    
+
+* Korean STT
+(Github)
+https://github.com/letgodchan0/Korean_STT    
+(Blog)
+https://velog.io/@letgodchan0/%EC%9D%8C%EC%84%B1%EC%9D%B8%EC%8B%9D-%ED%95%9C%EA%B5%AD%EC%96%B4-STT-3    
+
+* 
