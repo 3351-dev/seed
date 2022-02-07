@@ -197,6 +197,7 @@ ffplay -f f32le -ar 48000 -ac 2 snake.raw
 01.28 14:46 Start   
 02.03 06:44 Epoch 2 End   
 딱 일주일 학습만에 epoch 2 끝.   
+일주일만에 학습한 데이터로는 잘 표현되지않았다.   
 
 Colab 단점, 데이터가 많은 것을 구글 드라이브에 올려야한다.. Local 마운트는 왜 안될까?   
 
@@ -240,3 +241,17 @@ https://velog.io/@letgodchan0/%EC%9D%8C%EC%84%B1%EC%9D%B8%EC%8B%9D-%ED%95%9C%EA%
 (KoSpeech)   
 https://github.com/sooftware/kospeech#introduction   
 
+
+# 0207
+주말동안 Epoch 4까지 끝났다   
+epoch 3 S 0203 1052     
+epoch 3 E 0205 0435    
+epoch 4 S 0205 0843    
+epoch 4 E 0207 0218    
+```
+sudo python3 ./bin/inference.py --model_path /STT/kospeech/outputs/2022-01-28/15-24-33/model.pt --audio_path /STT/KsponSpeech_01/KsponSpeech_0001/KsponSpeech_000005.pcm
+```
+기존에 사용했던 model.pt    
+2epoch나 4epoch나 별 차이가 없다..?    
+
+! 구글코랩으로 학습했을때 기존보다 3500% 차이가 났다.....    
