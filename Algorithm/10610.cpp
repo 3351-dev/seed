@@ -10,9 +10,8 @@ int main(){
     cin >> N;
 
     for(int i=0;i < N.size();i++){        
-        // sum += N[i]-'0';
-        sum += N[i]&15;
-        printf("%d\n",sum);
+        sum += N[i]-'0';
+        // sum += N[i]&15;
         if(N[i]-'0' == 0){
             // printf("%d\n",i);
             switchZ =1;
