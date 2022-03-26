@@ -1,8 +1,5 @@
 #include<iostream>
-#include<cstdio>
-
-using namespace std;
-int main(){
-	printf("hello World\n");
-	return 0;
+int main(int argc, char **argv){
+    std::cout<<"Hello World"<<std::endl;
+    return 0;
 }
