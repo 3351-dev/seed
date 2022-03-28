@@ -2,9 +2,10 @@
 #include <iostream>
 using namespace std;
 int main(){
-    int case;
-    cin >> case;
-    for(int i=0;i<case;i++){
+    int testCase=0;
+    cin >> testCase;
+
+    for(int i=0;i<testCase;i++){
         int case_num;
         cin >> case_num;
         float point[case_num];
@@ -16,8 +17,8 @@ int main(){
         }
         sum /= case_num;
         for(int k=0;k<case_num;k++){
-            if(point[k]>sum) cnt ++;
+            if(point[k]>sum) cnt++;
         }
-        printf("%.3f",case_num/cnt);
+        printf("%.3f%%\n",(float)cnt/case_num*100);
     }
 }
