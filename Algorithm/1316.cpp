@@ -10,6 +10,8 @@ using namespace std;
     다음 단어가 같으면 치환해주는 개념으로 접근?
  */
 int main(){
-
+    int cnt=0,n;
+    cin >> n;
+    for(int i=0;i<n;i++)
 
 }
