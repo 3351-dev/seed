@@ -1,0 +1,106 @@
+<!doctype html><html lang="en">
+	<head>
+
+		<meta charset="utf-8"/><link rel="icon" href="/favicon.ico"/><meta name="viewport" content="width=device-width,initial-scale=1"/><meta name="theme-color" content="#000000"/><meta name="description" content="Web site created using create-react-app"/><link rel="apple-touch-icon" href="/logo192.png"/><link rel="manifest" href="/manifest.json"/><title>React App</title><link href="/static/css/main.d1b05096.chunk.css" rel="stylesheet">
+		<meta http-equiv="Expires" content="-1">
+		<meta http-equiv="Expires" content="Mon, 06 Jan 1990 00:00:01 GMT">
+		<style>
+			html, body{
+				height: 100%;
+			}
+			div{
+				width: 100%;
+				height: 100%;
+			}
+			div.left{
+				float: left;
+				width: 50%;
+				/*background: #ff0;*/
+			}
+			div.right{
+				float: right;
+				width: 50%;
+				height: 30%;
+				/*background: #0ff;*/
+			}
+			iframe{
+				width:  100%;
+			}
+		</style>
+		
+	</head>
+
+<body>
+	<div>
+		<div class="left">여기에 캐릭터<br>
+			<img src="TTS/robot.png" alt="robot" width="100%">
+
+		</div>
+		<div class="right">
+			<div class="right_up">여기에 Input
+				
+				<!-- <form target="right_down" method="POST" action=ajaxCall()> -->
+				<form target="right_down" method="POST" id=form action=test.php>
+					<!-- <form target="right_down" method="POST"> -->
+					<input type="text" id="text" name="text"/>
+					<input type="submit" onclick="ajaxCall()" value="submit"></input>
+				</form>
+				
+
+				<!-- <input type="submit" class="button" name="submit" value="submit"/> -->
+				5초 정도 기다려주세요
+			</div>
+			
+			<iframe name="right_down" id="right_down" frameborder="0">
+			</iframe>
+			
+			<div id="div_right_down">
+				<audio id="audio_id" controls>
+					<source id="audio_source" src="TTS/audio/0.wav" type="audio/wav">
+				</audio>
+				
+			</div>
+			
+		</div>
+	</div>
+
+	
+	<script src="jquery-3.6.0.min.js"></script>
+	<script type="text/javascript">
+		
+		let text = document.getElementById('text');
+
+		function ajaxCall(){
+			$.ajax({
+				type:"POST",
+				url:"test.php",
+				cache:false,
+				// dataType:'json',
+				data:{ 
+					"text": text.value
+				},
+				success: function(text){
+					console.log(text);
+					// $('audio #audio_source').attr('src', text);
+					var time = new Date().getTime();
+					var src = 'TTS/audio/0.wav?time='+time;
+					// var src = 'TTS/audio/0.wav';
+					var $audio = $('#audio_id');	//이렇게하면 빨라진다던데..... 별 소용이 없네
+					$audio.attr('src',src);
+					$audio.get(0).load();
+					$audio.get(0).play();
+					// document.getElementById('audio_id').load();
+					// document.getElementById('audio_id').play();
+					// $('TTS/audio/0.wav').get(0).load();	// 이거 오류남
+					// $('TTS/audio/0.wav').get(0).play();
+				},
+				error:function(data){
+					console.log(error);
+				},
+			})		
+		}
+	</script>
+	
+</body>
+
+</html>
