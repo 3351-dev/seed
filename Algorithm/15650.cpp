@@ -1,33 +1,32 @@
-// 15649.cpp
+// 15650.cpp
 
 #include <iostream>
 #define MAX 9
-
 using namespace std;
 
 int n,m;
 int arr[MAX] = {0,};
 bool visited[MAX] = {0,};
 
-void dfs(int cnt){
+void dfs(int num, int cnt){
     if(cnt == m){
-        for(int i=0;i<m;i++){
+        for(int i = 0; i < m; i++)
             cout << arr[i] << " ";
-        }
-        cout << "\n";
+        cout << '\n';
         return;
     }
-    for(int i=1;i<n+1;i++){
+    for(int i = num; i < n + 1; i++){
         if(!visited[i]){
             visited[i] = true;
             arr[cnt] = i;
-            dfs(cnt+1);
+            dfs(i+1,cnt+1);
             visited[i] = false;
         }
     }
 }
 
-int main(){
+int main() {
     cin >> n >> m;
-    dfs(0);
+    dfs(1,0);
 }
+
