@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="ko">
+	<head>
+        <link rel="icon" type="image/x-icon" href="favicon.ico">
+		<meta charset="utf-8"/>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+		<style>
+			html, body{
+				height: 100%;
+			}
+			div{
+				overflow: visible;
+				width: 100%;
+				height: 100%;
+			}
+			div.left{
+				float: left;
+				width: 50%;
+				/*background: #ff0;*/
+			}
+			div.right{
+				float: right;
+				width: 50%;
+				/*height: 10%;*/
+				/*background: #0ff;*/
+			}
+			div.right_element{
+				height: 20%;
+			}
+			iframe{
+				width:  90%;
+				height:  35%;
+			}
+			audio{
+				width: 80%;
+			}
+			body{
+				overflow:  auto;
+			}
+		</style>
+		
+	</head>
+
+<body>
+	<div>
+		<div class="left"><br>
+			<img src="thankage.jpg" alt="thankage" width="80%">
+
+		</div>
+		<div class="right">
+			<div class="right_element"><br><br>
+				<b>✅ Right up [STT] :: </b><br>
+    			<button id="rec_btn" action=iframe.php>녹음 / 정지</button>
+    			<div id="sound-clips">
+    				<audio id="rec_audio" controls> 녹음된 소리 재생 </audio>
+    				<iframe id="ifr_right_up" frameborder="0"></iframe>
+    			</div>
+			</div><br><br>
+
+			<div class="right_element"><br><br>
+<!--				<b>🚧 <del>Right mid [ChatBot]</del> 🚧</b> --!>
+			</div>
+
+			<div class="right_element"><br><br>
+				<b>✅ Right down [TTS]</b>
+<!--				<br> AJAX -> FastAPI    --!>
+				<form method="GET" id=form action=iframe.php target="ifr_right_down">
+					<!-- <form target="right_down" method="POST"> -->
+					<input type="text" id="fastText" name="fastText"/>
+					<input type="submit" onclick="ajaxToFast()" value="submit"></input>
+				</form>
+
+				<iframe name="ifr_right_down" id="ifr_right_down" frameborder="0">
+				</iframe>
+				<br>
+				<audio id="audio_id" controls>
+					<source id="audio_source" type="audio/wav">
+				</audio>
+			</div>
+
+		</div>
+	</div>
+
+	
+	<!-- <script src="http://code.jquery.com/jquery-latest.js"></script> -->
+	 <script src="jquery-3.6.0.min.js"></script>
+<!--    <script src="http://code.jquery.com/jquery-latest.min.js"></script> -->
+	<!-- <script src="https://cdn.WebRTC-Experiment.com/RecordRTC.js";></script> -->
+	<script type="text/javascript">
+
+		// STT recording
+		const $audioEl = document.getElementById("rec_audio");
+		const $btn = document.getElementById("rec_btn");
+		let isRecording = false;
+		let mediaRecorder = null;
+		const audioArray = [];
+
+		$btn.onclick = async function (event) {
+			if(!isRecording){
+				const mediaStream = await navigator.mediaDevices.getUserMedia({
+					audio: true
+				}); 
+
+				var option ={
+					audioBitsPerSecond : 128000,
+					mimeType : 'audio/webm; codecs=pcm'
+				};
+
+				mediaRecorder = new MediaRecorder(mediaStream,option);
+				mediaRecorder.ondataavailable = (event)=>{
+					audioArray.push(event.data);
+				}
+
+				mediaRecorder.onstop = (event)=>{
+					const blob = new Blob(audioArray);
+					const blobURL = window.URL.createObjectURL(blob);
+
+					$audioEl.src = blobURL;
+					$audioEl.play();
+					var a = document.createElement('a');
+				    a.href = blobURL;
+
+//				    fileName = blobURL.split("127.0.0.1/");
+				    fileName = blobURL.split("aiserver.thankage.com");
+
+				    
+				    // console.log(fileName[1]);
+
+				    a.download = fileName[1] +'.wav';
+				    // console.log(a.download)
+				    // a.click();	// Auto download 
+					audioArray.splice(0);
+
+					// blob을 변형한 부분
+					// console.log("blob >>\n",blob)
+					const blobFile = new File([blob], a.download);
+					// console.log("blobFile >>\n",blobFile)
+					// console.log(typeof(blobFile))	// object
+
+
+					// dataForm을 이용해 이름과 데이터를 넘기는 과정
+					let fd_data = new FormData();
+					fd_data.append("fd_name", a.download);
+					fd_data.append("fd_audio", blobFile);
+					// fd_data.append("fd_url", blobURL);
+					// fd_data.append("fd_audio", blob);
+
+					$.ajax({
+						type:'post',
+//						url:"https://192.168.20.252:8001/STT",
+//						url:"http://192.168.20.252:8001/STT",
+						url:"https://aiserver.thankage.com:8001/STT",
+						processData: false,	// 데이터 객체를 문자열로 바꿀지 
+						contentType: false,	// 일반 text로 구분
+						dataType:'json',
+						data:
+							fd_data,
+						// {
+						// 	// "text" : fileName[1],
+
+						// },
+						success: function(text){
+							console.log(text)
+							document.getElementById('ifr_right_up').src = "data:text/html;charset=utf-8," + text;
+						},
+					})
+					// console.log('STT');
+					
+				}
+				mediaRecorder.start();
+				isRecording = true; 
+			}
+			else{
+				mediaRecorder.stop();
+				isRecording = false; 
+			} 
+		}
+
+
+			// TTS
+		function ajaxToFast(){
+			let time = console.time('timechecker')
+			let text = document.getElementById('fastText');
+            let day = new Date();
+            let fileName = day.getFullYear()+"_"+(day.getMonth()+1)+"_"+day.getDate()+"_"+new Date().getTime();
+			// var text_str = JSON.stringify(text)
+			$.ajax({
+				type:"POST",
+ //               url:"http://127.0.0.1:8002/TTS",
+//				url:"https://192.168.20.252:8002/TTS",
+                url:"https://aiserver.thankage.com:8002/TTS",
+				cache:false,
+				dataType:'json',
+				async : true,
+				data:{ 
+					"text": text.value,
+                    "fileName": fileName
+				},
+				success: function(text){
+					console.log(text);
+					var time = new Date().getTime();
+//					var src = 'TTS/audio/0.wav?time='+time;
+					var src = 'TTS/audio/'+fileName+'.wav';
+					var $audio = $('#audio_id');
+					$audio.attr('src',src);
+					$audio.get(0).load();
+					$audio.get(0).play();
+					document.getElementById('ifr_right_down').src = "data:text/html;charset=utf-8," + text;
+				},
+				error:function(text){
+					console.log("error ", text);
+				},
+				complete: function(text){
+					// document.getElementById('ifr_right_down').src = "data:text/html;charset=utf-8," + text.value;
+					console.timeEnd('timechecker')
+				}
+			})		
+		}
+
+
+	</script>
+	
+</body>
+
+</html>

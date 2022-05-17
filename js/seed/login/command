@@ -1,0 +1,1 @@
+python TTS/bin/compute_statistics.py --data_path /usr/share/nginx/demo/audio/training@test.com/filelists/wavs/ /usr/share/nginx/demo/audio/training@test.com/config.json /usr/share/nginx/demo/audio/training@test.com/scale_stats.npy
