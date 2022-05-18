@@ -1,0 +1,2 @@
+./audio/daemon@test/a7185479-5c83-4485-aef0-4b7cc4df3acb_daemon@test.wav
+./audio/daemon@test/074a337e-6997-47db-b0ef-2ff1a14e4417_daemon@test.wav
