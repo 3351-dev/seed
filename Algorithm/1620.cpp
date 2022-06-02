@@ -12,14 +12,14 @@ map<string, int> maps;
 
 int main(){
     cin >> n >> m;
-    for(int i=0;i<n;i++){
+    for(int i=1;i<n+1;i++){
         string s;
         cin >> s;
         name[i] = s;
         maps.insert(make_pair(s,i));
     }
 
-    for(int i=0;i<m;i++){
+    for(int i=1;i<m+1;i++){
         string s;
         int n;
         cin >> s;
