@@ -32,11 +32,16 @@ with open('0622_scenario_2','w',encoding='utf-8') as ff:
 		ff.write(line)
 
 with open('0622_scenario_2','r',encoding='utf-8') as f:
-	with open('0622_scenario_3','w',encoding='utf-8') as ff:
+	with open('0622_scenario_3.csv','w',encoding='utf-8') as ff:
 		lines = f.readlines()
 		for line in lines:
 			line = line.strip('-) ')
 			if len(line) < 15:
 				line = ''
-			ff.write(line)
+
+			cnt=len(line)-1
+			if cnt > 0:
+				line = line.replace('\n','\t')
+				line += str(cnt)+'\n'
+				ff.write(line)
 
